@@ -1,4 +1,5 @@
 - [] Create a chatbot:
+    - [] Manage the chat_history size (check [./KNOWN_LIMITATIONS] 1. )
 - [] Document JSON Format prompt
 - [] Create the database
 - [] Create the prompt system
