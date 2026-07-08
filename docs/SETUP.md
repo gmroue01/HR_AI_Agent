@@ -98,3 +98,43 @@ python-dotenv is very easy to install.
 ``` 
 pip install python-dotenv
 ```
+
+
+
+## FastAPI
+
+FastAPI is a modern, fast, web framework for building APIS with Python based on standard Python type hints.
+
+I use it to deploy an backend API that allow to communicate with a database.
+
+
+### Installation
+
+FastAPI is very easy to install.
+
+```bash
+pip install "fastapi[standard]"
+```
+
+
+
+
+## PyDantic
+
+Pydantic is a data validation library for Python. 
+
+I use it to combine with FastApi that is based on type hints. PyDantic enable to construct schema validation and serialization.
+
+
+It helps for documenation.
+
+It emits JSON Schema too.
+
+
+### Installation 
+
+```bash
+
+pip install pydantic
+
+```
