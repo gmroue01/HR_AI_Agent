@@ -1,4 +1,4 @@
 - [] Create a chatbot:
-    
+- [] Document JSON Format prompt
 - [] Create the database
 - [] Create the prompt system
