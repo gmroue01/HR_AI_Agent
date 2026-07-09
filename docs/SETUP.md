@@ -117,18 +117,11 @@ pip install "fastapi[standard]"
 ```
 
 
-
-
 ## PyDantic
 
 Pydantic is a data validation library for Python. 
 
-I use it to combine with FastApi that is based on type hints. PyDantic enable to construct schema validation and serialization.
-
-
-It helps for documenation.
-
-It emits JSON Schema too.
+I use it to combine with FastApi that is based on type hints. PyDantic enable to construct schema type validation.
 
 
 ### Installation 
@@ -138,3 +131,22 @@ It emits JSON Schema too.
 pip install pydantic
 
 ```
+
+## Typing
+
+
+Typing is a module and implements Python's gradual typing system. It allows developpers to add type hints to their code, which can help with code clarity, maintainability and error detection during development.
+
+Typing module is build-in Python since Python 3.5 .
+
+No installation required.
+
+## Python SQLite3
+
+Python SQLite3 module is used to integrate the SQLite database with Python.
+It is a standardized Python DBI API 2.0 and provides a straightforward and simple-to-use interface for interacting with SQLite databases. 
+
+Python SQLite3 is build-in in Python since Python 2.5.
+
+
+
