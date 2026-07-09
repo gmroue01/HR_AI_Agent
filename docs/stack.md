@@ -149,4 +149,52 @@ It is a standardized Python DBI API 2.0 and provides a straightforward and simpl
 Python SQLite3 is build-in in Python since Python 2.5.
 
 
+## Uvicorn 
 
+uvicorn is a *asynchronous server gateway interface*, which is intented to provide a standard interface between async-capable Python web servers, frameworks, and application.
+
+Uvicorn is sponsored by FastApi and support HTTP/1.1 and WebSockets.
+
+### Installation 
+
+uvicorn is easy to install.
+
+```bash
+pip install uvicorn
+```
+
+### Run the interface
+
+To run the interface, we need this command :
+
+```bash
+uvicorn main:app
+```
+
+As `main:app` refers to a `main.py` that runs the interface application.
+
+Let's see example for documentations (https://uvicorn.dev/#quickstart) : 
+
+```python
+# main.py
+async def app(scope, receive, send):
+    assert scope['type'] == 'http'
+
+    await send({
+        'type': 'http.response.start',
+        'status': 200,
+        'headers': [
+            (b'content-type', b'text/plain'),
+            (b'content-length', b'13'),
+        ],
+    })
+    await send({
+        'type': 'http.response.body',
+        'body': b'Hello, world!',
+    })
+
+```
+
+```bash
+uvicorn main:app
+```

@@ -17,6 +17,11 @@ The script defines three classes:
 
 Note that these three class inherit from `BaseModel`, which provides the core validation and serialization logic. Check the Pydantic documentation for more details in (https://pydantic.dev/docs/validation/latest/api/pydantic/base_model/).
 
+**Design rationale:** separate classes per operation (rather than one model with optional 
+fields) enforce stricter validation per context — e.g. `EmployeeOut` deliberately excludes 
+sensitive fields (salary, SSN...) so the API response can never leak them even if the 
+DB row contains them.
+
 
 ## Database connection [`database.py`](./database.py)
 

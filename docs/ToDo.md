@@ -3,3 +3,7 @@
 - [] Document JSON Format prompt
 - [] Create the database
 - [] Create the prompt system
+
+
+- Mettre un default sur healthy
+
