@@ -46,6 +46,22 @@ def create_employee(employee: EmployeeCreate, db: sqlite3.Connection = Depends(g
 # Get all employees
 @app.get("/employees/all", response_model=list[EmployeeOut])
 def get_all_employees(db: sqlite3.Connection = Depends(get_db)):
+    """
+    Retrieve all the employee of the table
+
+    Args: 
+
+    db (sqlite3.Connection) : the database connection, provided by the get_db dependency.
+
+    Returns: 
+
+     A list of employee records as dictionaries, one per row. 
+
+
+
+
+    """
+
     rows = db.execute("SELECT * FROM employees").fetchall()
 
     return [dict(row) for row in rows]
@@ -53,7 +69,7 @@ def get_all_employees(db: sqlite3.Connection = Depends(get_db)):
 
 
 @app.get("/employees/id/{employee_id}", response_model=EmployeeOut)
-def get_employees(employee_id: int, db: sqlite3.Connection = Depends(get_db)):
+def get_employee(employee_id: int, db: sqlite3.Connection = Depends(get_db)):
     """
     Retrieve an employee by their ID.
 
@@ -134,13 +150,10 @@ def delete_employee(employee_id: int, db: sqlite3.Connection = Depends(get_db)):
 
     """
 
-    # use fetchone to return only the first row retrieved
-    existing_employee = db.execute(
-        "SELECT * FROM employees WHERE id = ?", (employee_id,)).fetchone()
+    # use fetchone to return only the first row retrieve
 
-    if existing_employee is None:
-        raise HTTPException(status_code=404, detail="Employee not found")
-
-    db.execute(f"DELETE FROM employees WHERE id = {employee_id}")
+    results = db.execute(f"DELETE FROM employees WHERE id = ?", (employee_id,))
     db.commit()
-    return get_all_employees(db)
+
+    if results.rowcount == 0:
+        raise HTTPException(status_code=404, detail="Employee not found")

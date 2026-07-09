@@ -50,8 +50,51 @@ It wrapps the `yield` in a `try/finaly` block ensures `conn.close()` runs even i
 
 ## API file ['main.py'](./main.py)
 
+The FastApi application is callable by the `FastAPI()` function.
+
 This file gathers all the API call function of the backend.
 
-The avalaibles functions are the following:
+The avalaibles functions are the REST Endpoints:
 
-    - `create_employee(...)`
+    - `create_employee()` (POST): insert a new employee into the database and return the created employee
+    - `get_all_employees(GET)` : retrieve all the employee of the table
+    - `get_employee(GET)` : retrieve an employee by their ID.
+    - `update_employee(PATH)` : Update an existing employee data.
+    - `delete_employee(POST)`:  Delete one employee by ID.
+
+Precisly, the decorators of all theses function implement the routing and the Python function implement the logic. 
+
+In order to interact with the database, each function calls `Depends(get_db)`.
+
+`Depends` is a special FastApi function that takes callable as `get_db()` function from `database.py` script.
+
+### SQL Injection prevention :
+
+Script uses the specific syntax in all SQL command in order to avoid SQL-injection.
+
+```python
+ "SELECT * FROM employees WHERE id = ?", (employee_id,)).fetchone()
+```
+
+Note that : 
+
+- `?` is a placheholder.
+- `(employee_id)` is argument replaced by the placeholder.
+- `fetchone()` is a function that returns the first row.
+
+So as to return all the rows, use `fetchall()`.
+
+FastAPI provides a Swagger UI at  `http://127.0.0.1:8000/docs`, which lets us test routes directly in the browser.
+
+
+
+
+
+
+
+
+
+
+
+
+
