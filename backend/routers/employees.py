@@ -31,4 +31,4 @@ def update_employee(employee_id: int, employee: EmployeeUpdate, db: sqlite3.Conn
 
 @router.delete("/{employee_id}/delete", status_code=204)
 def delete_employee(employee_id: int, db: sqlite3.Connection = Depends(get_db)):
-    delete_employee_logic(employee_id, db)s
+    delete_employee_logic(employee_id, db)
