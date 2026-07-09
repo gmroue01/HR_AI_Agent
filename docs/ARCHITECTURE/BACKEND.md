@@ -48,3 +48,10 @@ conn.execute("PRAGMA foreign_keys = ON")
 It wrapps the `yield` in a `try/finaly` block ensures `conn.close()` runs even if the route raises an exception. Without this pattern, an error inside a route would leave the connection open indefinitly.
 
 
+## API file ['main.py'](./main.py)
+
+This file gathers all the API call function of the backend.
+
+The avalaibles functions are the following:
+
+    - `create_employee(...)`
