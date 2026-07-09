@@ -15,7 +15,8 @@ class EmployeeCreate(BaseModel):
     name: str
     role: Literal["employee", "HR"] = "employee"
     salary: float = 1200
-    wellness: Literal["healthy", "unhealthy", "wait for a wellness checkup"]
+    wellness: Literal["healthy", "unhealthy",
+                      "wait for a wellness checkup"] = "healthy"
     expense_amount: float = 0
 
 
