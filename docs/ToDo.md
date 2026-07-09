@@ -4,6 +4,4 @@
 - [] Create the database
 - [] Create the prompt system
 
-
-- Mettre un default sur healthy
-
+- TODO dans chatbot.py

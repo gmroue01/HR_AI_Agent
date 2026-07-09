@@ -23,6 +23,8 @@ sensitive fields (salary, SSN...) so the API response can never leak them even i
 DB row contains them.
 
 
+
+
 ## Database connection [`database.py`](./database.py)
 
 This script create the database connection.
