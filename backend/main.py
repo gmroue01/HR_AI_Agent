@@ -116,7 +116,7 @@ def update_employee(employee_id: int, employee: EmployeeUpdate, db: sqlite3.Conn
 
 
 @app.delete("/employee/delete/{employee_id}", status_code=204)
-def delete_employee(employee_id: int, db: sqlite3.Connection = Depends(get_db())):
+def delete_employee(employee_id: int, db: sqlite3.Connection = Depends(get_db)):
     """
     Delete one employee by id.
 
@@ -142,5 +142,5 @@ def delete_employee(employee_id: int, db: sqlite3.Connection = Depends(get_db())
         raise HTTPException(status_code=404, detail="Employee not found")
 
     db.execute(f"DELETE FROM employees WHERE id = {employee_id}")
-
+    db.commit()
     return get_all_employees(db)
