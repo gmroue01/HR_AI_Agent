@@ -1,6 +1,7 @@
 import sqlite3
+from pathlib import Path
 
-DB_PATH = "app.db"
+DB_PATH = Path(__file__).parent / "app.db"
 
 
 def get_db():
@@ -26,3 +27,10 @@ def get_db():
         yield conn
     finally:
         conn.close()
+
+
+def get_db_connection() -> sqlite3.Connection:
+    """Connexion directe, pour usage hors FastAPI (ex: dispatcher du chatbot)."""
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    return conn

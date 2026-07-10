@@ -9,22 +9,22 @@ from backend.services.employee_service import (
 router = APIRouter(prefix="/employees", tags=["employees"])
 
 
-@router.post("/", response=EmployeeOut, status_code=201)
+@router.post("/", response_model=EmployeeOut, status_code=201)
 def create_employee(employee: EmployeeCreate, db: sqlite3.Connection = Depends(get_db)):
     return create_employee_logic(employee, db)
 
 
-@router.get("/id/{employee_id}", response=EmployeeOut, status_code=201)
+@router.get("/id/{employee_id}", response_model=EmployeeOut, status_code=201)
 def get_employee(employee_id: int, db: sqlite3.Connection = Depends(get_db)):
     return get_employee_logic(employee_id, db)
 
 
-@router.get("/all", response=list[EmployeeOut])
+@router.get("/all", response_model=list[EmployeeOut])
 def get_all_employee(employee_id: int, db: sqlite3.Connection = Depends(get_db)):
-    return get_all_employees_logic(employee_id, db)
+    return get_all_employees_logic(db)
 
 
-@router.patch("/{employee_id}/update", response=EmployeeOut)
+@router.patch("/{employee_id}/update", response_model=EmployeeOut)
 def update_employee(employee_id: int, employee: EmployeeUpdate, db: sqlite3.Connection = Depends(get_db)):
     return update_employee_logic(employee_id, employee, db)
 
