@@ -15,7 +15,7 @@ def extract_pdf_text(file_path: str) -> str:
     return text
 
 
-def chunk_test(text: str, chunk_size: int = 500, overlap: int = 500) -> list[str]:
+def chunk_test(text: str, chunk_size: int = 500, overlap: int = 50) -> list[str]:
     """Fixed-size character chunking with overlap"""
 
     chunks = []
@@ -24,9 +24,31 @@ def chunk_test(text: str, chunk_size: int = 500, overlap: int = 500) -> list[str
         print(f"It remains {len(text) - start}.")
         end = start + chunk_size
         chunks.append(text[start:end])
-        start = chunk_size - overlap
+        start += chunk_size - overlap
     return chunks
 
 
+def ingest_documents(folder_path: str):
+    collection = get_collection()
+    folder = Path(folder_path)
+
+    for file_path in list(folder.glob("*.txt")) + list(folder.glob("*.pdf")):
+
+        if file_path.suffix == ".pdf":
+            text = extract_pdf_text(file_path)
+        else:
+            text = file_path.read_text(encoding="utf-8")
+
+        chunks = chunk_test(text)
+
+        collection.add(
+            documents=chunks,
+            ids=[f"{file_path.stem}_{i}" for i in range(len(chunks))],
+            metadatas=[{"source": file_path.name, "category": "hr_policy"}
+                       for _ in chunks]
+        )
+        print(f"Ingested : {file_path.name} ({len(chunks)}) chunks")
+
+
 if __name__ == "__main__":
-    print(extract_pdf_text("./data/hr_policies/expense_policy.pdf"))
+    ingest_documents("data/hr_policies/")
