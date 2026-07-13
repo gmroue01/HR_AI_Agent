@@ -198,3 +198,27 @@ async def app(scope, receive, send):
 ```bash
 uvicorn main:app
 ```
+
+
+## ChromaDB
+
+ChromaDB is an open-source data infrastructure for AI. It enables to build RAG systems including the embeddings, retrieval algorithms.
+
+
+### Installation
+
+```bash
+pip install chromadb
+```
+
+## pdfplumber
+
+pdfplumber plumb a PDF for detailed information about each text character, rectangle, and line. 
+
+
+### Installation
+
+```bash
+
+pip install pdfplumber
+``` 
