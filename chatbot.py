@@ -15,9 +15,16 @@ MAX_HISTORY_MESSAGES = 20
 
 
 def clean_tool_args(fn_name: str, fn_args: dict, tools_schema: list) -> dict:
-    """Filtre les arguments pour ne garder que les clés attendues par le schéma du tool.
-    Corrige les quirks de génération de certains modèles (ex: {'data': {}} ou {'': {}}
-    au lieu de {} quand le tool n'a aucun paramètre)."""
+    """
+    Filter all args in order to only keep the expected key from the tool schema.
+
+    Parameters : 
+
+    fn_name : tool's name.
+    fn_args : tool's args.
+    tools_schema : a JSON list of tools avalaible for the agent.
+
+    """
     schema = next(
         (t["function"]["parameters"]
          for t in tools_schema if t["function"]["name"] == fn_name),
@@ -79,7 +86,7 @@ while True:
             fn_name = tool_call.function.name
             fn_args = json.loads(tool_call.function.arguments)
             fn_args = clean_tool_args(
-                fn_name, fn_args, TOOLS_SCHEMA)  
+                fn_name, fn_args, TOOLS_SCHEMA)
             print("DEBUG fn_args:", repr(fn_args))
 
             if fn_name not in AVAILABLE_FUNCTIONS:
