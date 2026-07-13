@@ -31,4 +31,4 @@ build-system
 tool.setuptools.packages.find
 ]
 where = ["."]
-include = ["backend","tools*"]
+include = ["backend","tools*","rag*"]
