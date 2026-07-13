@@ -42,10 +42,13 @@ def clean_tool_args(fn_name: str, fn_args: dict, tools_schema: list) -> dict:
 system_prompt = {
     "role": "system",
     "content": (
-        "You are an HR assistant with access to the company's employee database "
-        "through function calling. You must NEVER write code or describe function "
-        "calls as text. Instead, use the native tool calling mechanism provided by "
-        "the API. When a user asks about employee data, invoke the appropriate tool directly."
+        "You are an HR assistant with access to: (1) the employee database via "
+        "function calling, and (2) the company's HR policy documents via semantic "
+        "search. Use search_hr_documents when the user asks about policies, "
+        "procedures, or benefits. Use get_all_employees for employee data queries. "
+        "Always ground your answers in the retrieved information rather than "
+        "general knowledge, and mention which source document the information "
+        "came from when available. Answer shortly and precisely."
     )
 }
 chat_history = [system_prompt]
@@ -70,7 +73,16 @@ while True:
 
     assistant_message = {"role": "assistant",
                          "content": response_message.content}
+
+    # When the model requests tool calls, this block:
+    #  1. Appends the assistant's tool call decision to chat_history (required by
+    #    the Groq API to keep the conversation state consistent).
+    #  2. For each requested tool: cleans/validates its arguments via
+    #    clean_tool_args(), executes it if known, and appends the result
+    #    (or a structured error if the function is unknown or raises) to
+    #    chat_history as a "tool" role message.
     if tool_calls:
+
         assistant_message["tool_calls"] = [
             {
                 "id": tc.id,
@@ -79,15 +91,13 @@ while True:
             }
             for tc in tool_calls
         ]
-    chat_history.append(assistant_message)
+        chat_history.append(assistant_message)
 
-    if tool_calls:
         for tool_call in tool_calls:
             fn_name = tool_call.function.name
             fn_args = json.loads(tool_call.function.arguments)
             fn_args = clean_tool_args(
                 fn_name, fn_args, TOOLS_SCHEMA)
-            print("DEBUG fn_args:", repr(fn_args))
 
             if fn_name not in AVAILABLE_FUNCTIONS:
                 results = {"error": f"Fonction inconnue: {fn_name}"}
@@ -111,6 +121,7 @@ while True:
             tools=TOOLS_SCHEMA,
             tool_choice="none"
         )
+
         final_message = final_response.choices[0].message
         chat_history.append(
             {"role": "assistant", "content": final_message.content})
