@@ -28,7 +28,27 @@ TOOLS_SCHEMA = [
                 "required": ["query"]
             }
         }
+    },
+
+    {
+        "type": "function",
+        "function": {
+            "name": "update_my_wellness",
+            "description": (
+                "Update the current user's own wellness status. Use this only when "
+                "the user wants to update their own wellness/health status."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "wellness": {
+                        "type": "string",
+                        "enum": ["healthy", "unhealthy", "wait for a wellness checkup"],
+                        "description": "The new wellness status."
+                    }
+                },
+                "required": ["wellness"]
+            }
+        }
     }
-
-
 ]
