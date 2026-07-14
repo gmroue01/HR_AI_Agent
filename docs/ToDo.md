@@ -1,7 +1,9 @@
-- [] Create a chatbot:
-    - [] Manage the chat_history size (check [./KNOWN_LIMITATIONS] 1. )
-- [] Document JSON Format prompt
-- [] Create the database
-- [] Create the prompt system
+A documenter :
 
-- TODO dans chatbot.py
+- Docs the rag system
+- Doc ui script and modification of chatbot.py
+- Doc user role system
+- Login page 
+- Features: change wellness status
+- Features : 
+- 

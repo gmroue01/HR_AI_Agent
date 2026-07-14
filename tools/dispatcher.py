@@ -19,12 +19,14 @@ def get_my_info(user_role: str = None, employee_id: int = None):
     try:
         employee = get_employee_logic(employee_id, db)
         return {
-            "salary": employee["salary"],
-            "wellness": employee["wellness"],
-            "expense_amount": employee["expense_amount"],
+            "salary": employee.salary,
+            "wellness": employee.wellness,
+            "expense_amount": employee.expense_amount,
         }
     except ValueError as e:
+
         return {"error": str(e)}
+
     finally:
         db.close()
 
