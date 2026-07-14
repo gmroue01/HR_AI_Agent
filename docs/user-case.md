@@ -14,7 +14,7 @@ Employee :
 
     - Submit an expense (type, amount, description)
     - Ask about expense policy (limits, eligible categories)
-    - Ask for current cumulative expense amount
+    - Ask for current cumulamettive expense amount
 
 Agent :
 

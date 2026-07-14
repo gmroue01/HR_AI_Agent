@@ -53,7 +53,7 @@ SYSTEM_PROMPT = {
 }
 
 
-def run_agent_turn(chat_history: list, user_message: str, user_role: str) -> tuple[list, str]:
+def run_agent_turn(chat_history: list, user_message: str, user_role: str, employee_id: int = None) -> tuple[list, str]:
     chat_history.append({"role": "user", "content": user_message})
 
     response = client.chat.completions.create(
@@ -88,7 +88,7 @@ def run_agent_turn(chat_history: list, user_message: str, user_role: str) -> tup
         else:
             try:
                 results = AVAILABLE_FUNCTIONS[fn_name](
-                    **fn_args, user_role=user_role)
+                    **fn_args, user_role=user_role, employee_id=employee_id)
             except Exception as e:
                 results = {"error": str(e)}
                 print("DEBUG ERROR:", e)

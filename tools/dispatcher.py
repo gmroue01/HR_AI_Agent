@@ -1,6 +1,4 @@
 from backend.database import get_db_connection
-
-from backend.models import EmployeeUpdate
 from backend.services.employee_service import (
     get_employee_logic,
     get_all_employees_logic,
@@ -24,11 +22,11 @@ def update_my_wellness(wellness: str, user_role: str = None, employee_id: int = 
         db.close()
 
 
-def search_hr_documents(query: str, user_role: str = None):
+def search_hr_documents(query: str, user_role: str = None, employee_id: int = None):
     return search_hr_documents_logic(query)
 
 
-def get_all_employees(user_role: str = None):
+def get_all_employees(user_role: str = None, employee_id: int = None):
     db = get_db_connection()
     try:
         employees = get_all_employees_logic(db)

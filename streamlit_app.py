@@ -30,7 +30,7 @@ def show_login():
 
 
 def show_chat():
-    st.title("💼 HR Agent")
+    st.title("HR Agent")
     st.caption(
         f"Hello **{st.session_state.username}**. You are the ({st.session_state.user_role})")
 
@@ -51,7 +51,7 @@ def show_chat():
             st.markdown(user_input)
         with st.spinner("Thinking..."):
             updated_history, reply = run_agent_turn(
-                st.session_state.chat_history, user_input, st.session_state.user_role
+                st.session_state.chat_history, user_input, st.session_state.user_role, employee_id=st.session_state.employee_id
             )
         st.session_state.chat_history = updated_history
         with st.chat_message("assistant"):
@@ -61,4 +61,5 @@ def show_chat():
 if st.session_state.user_role is None:
     show_login()
 else:
+
     show_chat()
