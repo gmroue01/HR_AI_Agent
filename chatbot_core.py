@@ -54,51 +54,53 @@ SYSTEM_PROMPT = {
 
 
 def run_agent_turn(chat_history: list, user_message: str, user_role: str, employee_id: int = None) -> tuple[list, str]:
-    chat_history.append({"role": "user", "content": user_message})
+    max_round = 5
+    for _ in range(max_round):
+        chat_history.append({"role": "user", "content": user_message})
 
-    response = client.chat.completions.create(
-        model=MODEL, messages=chat_history,
-        tools=TOOLS_SCHEMA, tool_choice="auto"
-    )
-    response_message = response.choices[0].message
-    tool_calls = response_message.tool_calls
+        response = client.chat.completions.create(
+            model=MODEL, messages=chat_history,
+            tools=TOOLS_SCHEMA, tool_choice="auto"
+        )
+        response_message = response.choices[0].message
+        tool_calls = response_message.tool_calls
 
-    assitant_message = {"role": "assistant",
-                        "content": response_message.content}
+        assitant_message = {"role": "assistant",
+                            "content": response_message.content}
 
-    if tool_calls:
-        assitant_message["tool_calls"] = [
-            {"id": tc.id, "type": tc.type, "function": {
-                "name": tc.function.name, "arguments": tc.function.arguments}}
-            for tc in tool_calls
-        ]
+        if tool_calls:
+            assitant_message["tool_calls"] = [
+                {"id": tc.id, "type": tc.type, "function": {
+                    "name": tc.function.name, "arguments": tc.function.arguments}}
+                for tc in tool_calls
+            ]
 
-    chat_history.append(assitant_message)
+        chat_history.append(assitant_message)
 
-    if not tool_calls:
-        return chat_history, response_message.content
+        if not tool_calls:
+            return chat_history, response_message.content
 
-    for tool_call in tool_calls:
-        fn_name = tool_call.function.name
-        fn_args = json.loads(tool_call.function.arguments)
-        fn_args = clean_tool_args(fn_name, fn_args, TOOLS_SCHEMA)
+        for tool_call in tool_calls:
+            fn_name = tool_call.function.name
+            fn_args = json.loads(tool_call.function.arguments)
+            fn_args = clean_tool_args(fn_name, fn_args, TOOLS_SCHEMA)
 
-        if fn_name not in AVAILABLE_FUNCTIONS:
-            results = {"error": f"Fonction inconnue: {fn_name}"}
-        else:
-            try:
-                results = AVAILABLE_FUNCTIONS[fn_name](
-                    **fn_args, user_role=user_role, employee_id=employee_id)
-            except Exception as e:
-                results = {"error": str(e)}
-                print("DEBUG ERROR:", e)
+            if fn_name not in AVAILABLE_FUNCTIONS:
+                results = {"error": f"Fonction inconnue: {fn_name}"}
+            else:
+                try:
+                    results = AVAILABLE_FUNCTIONS[fn_name](
+                        **fn_args, user_role=user_role, employee_id=employee_id)
+                except Exception as e:
+                    results = {"error": str(e)}
+                    print("DEBUG ERROR:", e)
 
-        chat_history.append({
-            "role": "tool",
-            "tool_call_id": tool_call.id,
-            "name": fn_name,
-            "content": json.dumps(results, default=str)
-        })
+            chat_history.append({
+                "role": "tool",
+                "tool_call_id": tool_call.id,
+                "name": fn_name,
+                "content": json.dumps(results, default=str)
+            })
 
     final_response = client.chat.completions.create(
         model=MODEL, messages=chat_history, tools=TOOLS_SCHEMA, tool_choice="none"
