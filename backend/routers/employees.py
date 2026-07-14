@@ -20,7 +20,7 @@ def get_employee(employee_id: int, db: sqlite3.Connection = Depends(get_db)):
 
 
 @router.get("/all", response_model=list[EmployeeOut])
-def get_all_employee(employee_id: int, db: sqlite3.Connection = Depends(get_db)):
+def get_all_employee(db: sqlite3.Connection = Depends(get_db)):
     return get_all_employees_logic(db)
 
 
