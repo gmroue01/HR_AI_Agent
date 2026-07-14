@@ -58,5 +58,6 @@ def get_all_employees(user_role: str = None, employee_id: int = None):
 AVAILABLE_FUNCTIONS = {
     "get_all_employees": get_all_employees,
     "search_hr_documents": search_hr_documents,
-    "update_my_wellness": update_my_wellness
+    "update_my_wellness": update_my_wellness,
+    "get_my_info": get_my_info,
 }
