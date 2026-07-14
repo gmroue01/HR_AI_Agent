@@ -6,6 +6,18 @@ from backend.models import EmployeeCreate, EmployeeUpdate, EmployeeOut
 app = FastAPI()
 
 
+FIELD_VISIBILIY = {
+    "employee": {"id", "surname", "name", "role"},
+    "HR": {"id", "surname", "name", "salary", "role", "wellness", "expense_amount"}
+}
+
+
+def filter_field_by_role(record: dict, user_role: str) -> dict:
+    allowed_fields = FIELD_VISIBILIY.get(
+        user_role, FIELD_VISIBILIY["employee"])
+    return {k: v for k, v in record.items() if k in allowed_fields}
+
+
 # Create a new employee
 def create_employee_logic(employee: EmployeeCreate, db: sqlite3.Connection = Depends(get_db)):
     """
