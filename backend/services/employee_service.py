@@ -162,3 +162,22 @@ def delete_employee_logic(employee_id: int, db: sqlite3.Connection = Depends(get
 
     if results.rowcount == 0:
         raise HTTPException(status_code=404, detail="Employee not found")
+
+
+def update_wellness_logic(employee_id: int, wellness: str, db) -> dict:
+    valid_values = {"healthy", "unhealthy", "wait for a wellness checkup"}
+    if wellness not in valid_values:
+        raise ValueError(f"Invalid wellness value : {wellness}")
+
+    existing = db.execute(
+        "SELECT * FROM employees WHERE id = ?", (employee_id,)).fetchone()
+    if existing is None:
+        raise ValueError("Employee not found")
+
+    db.execute("UPDATE employees SET wellness = ? WHERE id = ?",
+               (wellness, employee_id))
+    db.commit()
+
+    row = db.execute("SELECT * FROM employees WHERE id = ?",
+                     (employee_id,)).fetchone()
+    return dict(row)
