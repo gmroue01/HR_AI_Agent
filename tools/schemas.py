@@ -50,5 +50,21 @@ TOOLS_SCHEMA = [
                 "required": ["wellness"]
             }
         }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_my_info",
+            "description": (
+                "Return the current user's own employee record : salary, welness status and expense amount. Use this when the user asks about their own salary, wellness, or expenses."
+                "If its role is employee, it must not have access to any salary,wellness status and expense amount data of another employee."
+            ),
+            "parameters":
+                {
+                    "type": "object",
+                    "properties": {}
+            }
+
+        }
     }
 ]
