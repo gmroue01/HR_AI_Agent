@@ -51,10 +51,9 @@ SYSTEM_PROMPT = {
         "came from when available. Answer shortly and precisely."
     )
 }
-chat_history = [SYSTEM_PROMPT]
 
 
-def run_agent_turn(chathistory: list, user_message: str, user_role: str) -> tuple[list, str]:
+def run_agent_turn(chat_history: list, user_message: str, user_role: str) -> tuple[list, str]:
     chat_history.append({"role": "user", "content": user_message})
 
     response = client.chat.completions.create(
