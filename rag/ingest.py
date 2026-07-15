@@ -5,7 +5,17 @@ import pdfplumber
 
 
 def extract_pdf_text(file_path: str) -> str:
-    """ Extract text from pdf"""
+    """ Extract text from pdf
+
+    Arg: 
+
+        file_path : the path of PDF file.
+
+    Return:
+
+        text : the full plain-text.
+
+    """
     text = ""
     with pdfplumber.open(file_path) as pdf:
         for page in pdf.pages:
