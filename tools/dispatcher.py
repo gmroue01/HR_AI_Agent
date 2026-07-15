@@ -5,9 +5,27 @@ from backend.services.employee_service import (
     update_employee_logic,
     filter_field_by_role,
     update_wellness_logic,
-    get_employee_logic
+    get_employee_logic,
+    submit_expense_logic
 )
 from backend.services.document_service import search_hr_documents_logic
+
+
+def submit_expense(expense_type: str, amount: float, description: str, user_role: str = None, employee_id: int = None):
+    if employee_id is None:
+        return {"error": "No employee_id in session - cannot retrieve info"}
+
+    db = get_db_connection()
+
+    try:
+        result = submit_expense_logic(employee_id, amount, db)
+        result["expense_type"] = expense_type
+        result["description"] = description
+        return result
+    except ValueError as e:
+        return {"error": str(e)}
+    finally:
+        db.close()
 
 
 def get_my_info(user_role: str = None, employee_id: int = None):
@@ -62,4 +80,5 @@ AVAILABLE_FUNCTIONS = {
     "search_hr_documents": search_hr_documents,
     "update_my_wellness": update_my_wellness,
     "get_my_info": get_my_info,
+    "submit_expense": submit_expense
 }
