@@ -67,4 +67,9 @@ Essentialy, the function calls the `collection.query()` method from `ChromaDB` a
 The function returns a dictionary with the relevant text from the retrieved documents and their associated metadata.
 
 
+## Prompt Augmentation Layer : 
+
+In order to combine retrieved chunks with user's query and provide context to the LLM, the [`TOOLS_SCHEMA`](../tools/schemas.py) and the [`dispatcher.py`](../tools/dispatcher.py) scripts enalble to connection between the retrieval system and the agent.
+
+[`chatbot_core.py`](../chatbot_core.py) script orchestrates the agent's tool call.
 
