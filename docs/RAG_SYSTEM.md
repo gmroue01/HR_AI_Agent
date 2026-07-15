@@ -35,7 +35,7 @@ The logic behind this is to divide the text into overlapping segments, utilizing
 **ingest_documents()** applies the chunking algorithm to all the documents. 
 Each document is added to a `Collection`, which is the fundamental unit of storage and querying in `ChromaDB`.
 
-The `Collection` will embed them by using its default embedding function.
+The `Collection` will **embed** them by using its default embedding function.
 
 **ingest_documents()**  accepts  `.txt` and `.pdf` file.
 If the document is not a `.txt` file, it must be passed into a method that extracts its content into plain text.
@@ -43,6 +43,17 @@ If the document is not a `.txt` file, it must be passed into a method that extra
 This method is currently : 
 
 - **extract_pdf_text()**
+
+
+## Vector databases :
+
+The embedding vector is stored in a [`chroma_db`](../chroma_db/) folder.
+
+`chroma.sqlite3` is the database containing the vector.
+
+There is also a folder containing the  **HNSW** (*Hierarchical Navigable Small World*) vector index,
+, which is the foundation of the similarity search.
+
 
 
 
