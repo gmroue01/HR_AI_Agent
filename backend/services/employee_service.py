@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException
 import sqlite3
 from backend.database import get_db
 from backend.models import EmployeeCreate, EmployeeUpdate, EmployeeOut
-
+from backend.services.document_service import search_hr_documents_logic
 app = FastAPI()
 
 
@@ -181,3 +181,28 @@ def update_wellness_logic(employee_id: int, wellness: str, db) -> dict:
     row = db.execute("SELECT * FROM employees WHERE id = ?",
                      (employee_id,)).fetchone()
     return dict(row)
+
+
+MOUTHLY_EXPENSE_LIMIT = 850.0
+
+
+def submit_expense_logic(employee_id: int, amount: float, db) -> dict:
+    if amount <= 0:
+        raise ValueError("Expense amount must be positive")
+
+    existing = db.execute(
+        "SELECT expense_amount FROM employees where id = ?", (employee_id,)).fetchone()
+    if existing is None:
+        raise ValueError("Employee not found")
+
+    new_total = existing["expense_amount"] + amount
+    if new_total > MOUTHLY_EXPENSE_LIMIT:
+        return {
+            "accepted": False,
+            "reason": f"This would bring your mounthly total to {new_total:.2f} EUR, exceeding the {MOUTHLY_EXPENSE_LIMIT} EUR limit.",
+            "current_total": existing["expense_amount"],
+        }
+    db.execute("UPDATE employees SET expense_amount = ? WHERE id = ?",
+               (new_total, employee_id))
+    db.commit()
+    return {"accepted": True, "new_total": new_total}
