@@ -51,6 +51,21 @@ def chunk_test(text: str, chunk_size: int = 500, overlap: int = 50) -> list[str]
 
 
 def ingest_documents(folder_path: str):
+    """
+        Apply the chunk method and the embedding to every document.
+        The embedding is operated by the default embedding function of ChromaDB (collection).
+
+        Add the document to the on-disk vector database.
+
+        Arg :
+
+            folder_path : the folder path of the documents.
+
+        Return :
+            None
+
+    """
+
     collection = get_collection()
     folder = Path(folder_path)
 
