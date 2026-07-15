@@ -1,84 +1,41 @@
-# Architecture
+## `chatbot_core.py` — Agent turn flow
 
-This document explains and details all the technical aspects and choices of the chatbot part.
+This module orchestrates one full "turn" of the HR agent: receiving a user message, 
+letting the model decide whether to call tools, executing them, and producing a 
+final answer. Tool declaration and execution details are covered in 
+[`tool-calling.md`](./tool-calling.md); this section covers the surrounding flow.
 
-## `/chatbot`
+### `run_agent_turn(chat_history, user_message, user_role, employee_id=None)`
 
-This folder contains all the chatbot logic.
+Runs up to `max_round` (5) rounds of model calls:
 
-### `chatbot.py`
+1. The user message is sent to the model along with `TOOLS_SCHEMA` (`tool_choice="auto"`).
+2. If the model's response contains no tool calls, its content is returned immediately 
+   as the final answer.
+3. If it does, each tool is executed (see `tool-calling.md`) with `user_role` and 
+   `employee_id` passed through — these scope what data the tool is allowed to return, 
+   in line with the project's authorization matrix.
+4. The tool results are appended to `chat_history` as `tool` messages, and the loop 
+   repeats: the model sees the results and can either answer or request further tools.
 
-#### Initialization
+This means chained tool calls are supported (e.g. look up an employee, then search a 
+policy document, then answer) — not just a single tool-call round-trip.
 
-The script initializes the following components:
+### Round limit safeguard
 
-**API key**
+If the model still hasn't produced a final answer after `max_round` rounds, one last 
+call is made with `tool_choice="none"`, forcing the model to answer using only the 
+information already gathered, without requesting further tools. This guarantees the 
+function always terminates with a text response.
 
-```python
-API_KEY = os.environ.get("GROQ_API_KEY")
-```
+### `clean_tool_args(fn_name, fn_args, tools_schema)`
 
-`API_KEY` (`str`, constant) — the private Groq API key, stored in the `.env` file under `GROQ_API_KEY`.
+Filters the arguments returned by the model down to only the keys declared in that 
+tool's schema (`properties`), dropping anything the model may have hallucinated or 
+added incorrectly. Returns an empty dict if the tool isn't found in the schema.
 
-**Groq client**
+### System prompt
 
-```python
-client = Groq(api_key=API_KEY)
-```
-
-`client` (`Groq` object) — the entry point to the Groq API. It exposes methods to forward user prompts to a chosen model.
-
-**System prompt**
-
-`system_prompt` is a Python dictionary (JSON format) that defines the chatbot's default behavior:
-
-```python
-system_prompt = {
-    "role": "system",
-    "content": "..."
-}
-```
-
-See [PROMPT_SYSTEM.md](./PROMPT_SYSTEM.md) for details on how this is defined.
-
-**Chat history**
-
-```python
-chat_history = [system_prompt]
-```
-
-`chat_history` (`List[dict]`) — a list of JSON-formatted messages (role/content pairs) that stores the full conversation, starting with the system prompt.
-
-#### Main loop
-
-The script runs a loop that waits for user input:
-
-```python
-user_input = input("User: ")
-```
-
-Each user message is appended to `chat_history`:
-
-```python
-chat_history.append({"role": "user", "content": user_input})
-```
-
-See [PROMPT_JSON_FORMAT.md](./PROMPT_JSON_FORMAT.md) for details on the JSON message format.
-
-The full `chat_history` (including the system prompt) is sent to the model via `client.chat.completions.create()`:
-
-```python
-response = client.chat.completions.create(
-    model="llama-3.1-8b-instant",
-    messages=chat_history
-)
-```
-
-Required parameters:
-- `model` (`str`) — the Groq model to use.
-- `messages` (`List[dict]`) — the conversation history sent to the model for generating a response.
-
-The method returns a `ChatCompletion` object. See the [Groq API reference](https://console.groq.com/docs/api-reference#chat-create) for details.
-
-The assistant's response is appended to `chat_history`, then printed to the console.
+`SYSTEM_PROMPT` is currently defined inline in this file as a placeholder 
+(see the `TODO` in the source) — it is not yet loaded from an external prompt file.
 
