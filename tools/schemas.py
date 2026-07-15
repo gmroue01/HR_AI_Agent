@@ -66,5 +66,26 @@ TOOLS_SCHEMA = [
             }
 
         }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "submit_expense",
+            "description": (
+                "Submit a business expense for the current user, after verifying "
+                "eligibility against the expense policy (use search_hr_documents first "
+                "to check the expense type is compliant). Automatically checks against "
+                "the monthly limit."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "expense_type": {"type": "string", "description": "e.g. 'meal', 'hotel','transport'"},
+                    "amount": {"type": "number", "description": "Expense amount in EUR"},
+                    "description": {"type": "string", "description": "Short description of the expense"}
+                },
+                "required": ["expense_type", "amount", "description"]
+            }
+        }
     }
 ]
