@@ -16,7 +16,19 @@ def extract_pdf_text(file_path: str) -> str:
 
 
 def chunk_test(text: str, chunk_size: int = 500, overlap: int = 50) -> list[str]:
-    """Fixed-size character chunking with overlap"""
+    """Fixed-size character chunking with overlap
+
+    Args :
+
+        text : Text shall be chunked.
+        chunk_size : the number of characters per chunk.
+        overlap : the number of characters carried over from the previous chunk.
+
+    Return:
+        chunks : the set of individual chunk.
+
+
+    """
 
     chunks = []
     start = 0
