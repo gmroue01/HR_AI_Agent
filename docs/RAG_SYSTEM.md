@@ -28,12 +28,22 @@ In this project, we retrieve this type of source data :
 The large documents must be break into smaller, manageable chunks and cleans it for consistency.
 
 
-**chunk_test()** function implement the *fixed-size chunking*.
+**chunk_test()** function operates this task and implements the *fixed-size chunking*.
 The logic behind is to divide the text into overlapping segments, utilizing a predefined window size. This method ensures that the end of the one chunk overlaps with the beginning of the next and maintining the contextual integrity of the information.
 
 
 
+**ingest_documents()** applies the chunking algorithm to all the documents. 
+Each document is added to a `Collection`, which is the fundamental unit of storage and querying in `ChromaDB`.
 
+The `Collection` will embed them by using its default embedding function.
+
+**ingest_documents()**  accepts  `.txt` and `.pdf` file.
+If the document is not a `.txt` file, it must be passed into a method that extracts its content into plain text.
+
+This method is currently : 
+
+- **extract_pdf_text()**
 
 
 
