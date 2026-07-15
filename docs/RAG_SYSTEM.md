@@ -57,7 +57,14 @@ There is also a folder containing the  **HNSW** (*Hierarchical Navigable Small W
 
 
 
+## Similarity search :
 
+**search_hr_documents_logic()** implements the similarity search logic in the [`document_service.py`](../backend/services/document_service.py) script.
+
+Basicaly, the function calls the `collection.query()` method from `ChromaDB` and returns the good results according to the user's query.
+
+
+The function returns a dictionnary with the relevant text from the retrieved document and the meta-data linked to the document.
 
 
 
