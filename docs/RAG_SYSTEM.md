@@ -29,8 +29,7 @@ The large documents must be break into smaller, manageable chunks and cleans it 
 
 
 **chunk_test()** function operates this task and implements the *fixed-size chunking*.
-The logic behind is to divide the text into overlapping segments, utilizing a predefined window size. This method ensures that the end of the one chunk overlaps with the beginning of the next and maintining the contextual integrity of the information.
-
+The logic behind this is to divide the text into overlapping segments, utilizing a predefined window size. This method ensures that the end of one chunk overlaps with the beginning of the next and preserving the contextual integrity of the information.
 
 
 **ingest_documents()** applies the chunking algorithm to all the documents. 
