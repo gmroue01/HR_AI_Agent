@@ -12,4 +12,4 @@ Employees can submit expenses through the chatbot. The agent checks eligibility 
 
 **Flow:** search policy → LLM judges eligibility → `submit_expense` → server-side limit check → accept/reject + updated total.
 
-**Current focus:** validating that the model reasons correctly about *eligibility* (e.g. accepts a late-night taxi, rejects spa treatments and parking fines per policy Article 7) — not how the limit itself is sourced (kept hardcoded for now, dynamic RAG-based extraction was prototyped and deferred).
+**Current focus:** validating that the model reasons correctly about *eligibility* (e.g. accepts a late-night taxi, rejects spa treatments and parking fines per policy Article 7) — not how the limit itself is sourced (kept hardcoded for now, dynamic RAG-based extraction was prototyped and deferred). 
