@@ -247,3 +247,12 @@ openpyxl is a Python library to read/write Excel 2010 .xlsx file.
 pip install openpyxl
 
 ```
+## DeepEval
+
+deepeval is an open-source library providing a complete framework to test LLM system, RAG and hallucinations
+
+### Installation
+
+```bash
+pip install -U deepeval
+```
