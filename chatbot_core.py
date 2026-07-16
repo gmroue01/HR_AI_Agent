@@ -58,9 +58,14 @@ SYSTEM_PROMPT = {
 }
 
 
-def run_agent_turn(chat_history: list, user_message: str, user_role: str, employee_id: int = None) -> tuple[list, str]:
+def run_agent_turn(chat_history: list, user_message: str, user_role: str, employee_id: int = None) -> tuple[list, str, dict]:
     max_round = 5
     chat_history.append({"role": "user", "content": user_message})
+
+    trace = {
+        "tools_called": [],
+        "retrieved_chunks": [],
+    }
 
     for _ in range(max_round):
 
@@ -84,7 +89,7 @@ def run_agent_turn(chat_history: list, user_message: str, user_role: str, employ
         chat_history.append(assitant_message)
 
         if not tool_calls:
-            return chat_history, response_message.content
+            return chat_history, response_message.content, trace
 
         for tool_call in tool_calls:
             fn_name = tool_call.function.name
@@ -101,6 +106,15 @@ def run_agent_turn(chat_history: list, user_message: str, user_role: str, employ
                     results = {"error": str(e)}
                     print("DEBUG ERROR:", e)
 
+            trace["tools_called"].append({
+                "name": fn_name,
+                "arguments": fn_args,
+                "result": results,
+            })
+
+            if isinstance(results, list) and results and isinstance(results[0], dict) and "text" in results[0]:
+                trace["retrieved_chunks"].extend(results)
+
             chat_history.append({
                 "role": "tool",
                 "tool_call_id": tool_call.id,
@@ -116,4 +130,4 @@ def run_agent_turn(chat_history: list, user_message: str, user_role: str, employ
     chat_history.append(
         {"role": "assistant", "content": final_message.content})
 
-    return chat_history, final_message.content
+    return chat_history, final_message.content, trace
