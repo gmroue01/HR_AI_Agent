@@ -1,34 +1,16 @@
-[
-project
-]
-name="hr-agent"
-version="0.1.0"
-require-python = ">=3.10"
-dynamic = ["dependencies]
+[project]
+name = "hr-agent"
+version = "0.1.0"
+requires-python = ">=3.10"
+dynamic = ["dependencies"]
 
-[
-tool.setuptools.dynamic
-]
+[tool.setuptools.dynamic]
 dependencies = { file = ["requirements.txt"] }
 
-ok
-[
-build-system
-]
-requires=["setuptools>=68.0"]
-build-backend="setuptools.build_meta"
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
 
-[
-tool.setuptools.dynamic
-]
-dependencies = {file = ["requirements.txt"] }
-
-[
-build-system
-]
-
-[
-tool.setuptools.packages.find
-]
+[tool.setuptools.packages.find]
 where = ["."]
-include = ["backend","tools*","rag*"]
+include = ["backend*", "tools*", "rag*"]
