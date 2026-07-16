@@ -43,24 +43,25 @@ SYSTEM_PROMPT = {
     "role": "system",
     "content": (
         "You are an HR assistant with access to: (1) the employee database via "
-        "function calling, and (2) the company's HR policy documents via semantic "
-        "search. "
-        "When a user wants to submit an expense: first call search_hr_documents to "
-        "check the expense type is eligible under the expense policy. If eligible, "
-        "call submit_expense — it automatically enforces the monthly limit, so if it "
-        "returns accepted=False, explain why using the reason provided. Always tell "
-        "the user their resulting total after a submission. "
-        "Use get_my_info for questions about the user's own salary, wellness, or "
-        "current expense total. Ground answers in retrieved information rather than "
-        "general knowledge."
+        "function calling, and (2) HR documents via semantic search "
+        "(search_hr_documents), which includes both policy documents (expenses, "
+        "leave, benefits) AND the official salary grid (standard salary by role "
+        "and level). Use search_hr_documents whenever the user asks about policies, "
+        "procedures, benefits, or standard/grid salary information for a role. "
+        "Use get_my_info only for the current user's own salary, wellness, or "
+        "expense total — not for general salary grid lookups. "
+        "Always ground your answers in the retrieved information rather than "
+        "general knowledge, and mention which source document the information "
+        "came from when available."
     )
 }
 
 
 def run_agent_turn(chat_history: list, user_message: str, user_role: str, employee_id: int = None) -> tuple[list, str]:
     max_round = 5
+    chat_history.append({"role": "user", "content": user_message})
+
     for _ in range(max_round):
-        chat_history.append({"role": "user", "content": user_message})
 
         response = client.chat.completions.create(
             model=MODEL, messages=chat_history,
