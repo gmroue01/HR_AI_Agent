@@ -94,5 +94,6 @@ AVAILABLE_FUNCTIONS = {
     "search_hr_documents": search_hr_documents,
     "update_my_wellness": update_my_wellness,
     "get_my_info": get_my_info,
-    "submit_expense": submit_expense
+    "submit_expense": submit_expense,
+    "access_confidential_project": access_confidential_project
 }
