@@ -8,7 +8,7 @@ import openpyxl
 def extract_pdf_text(file_path: str) -> str:
     """ Extract text from pdf
 
-    Arg: 
+    Arg:
 
         file_path : the path of PDF file.
 
@@ -30,7 +30,7 @@ def extract_excel_text(file_path: str) -> str:
     """
         Extract the text from a excel file/
 
-    Arg: 
+    Arg:
 
         file_path : the path of PDF file.
 
@@ -50,7 +50,7 @@ def extract_excel_text(file_path: str) -> str:
 
         for row in sheet.iter_rows(min_row=2, values_only=True):
             row_text = ", ".join(
-                f"{headers[i]: {value}}" for i, value in enumerate(row) if value is not None
+                f"{headers[i]}: {value}" for i, value in enumerate(row) if value is not None
             )
             if row_text:
                 text += row_text + "\n"
@@ -106,8 +106,8 @@ def ingest_documents(folder_paths: str):
 
     for folder_path in folder_paths:
         folder = Path(folder_path)
-        all_files += (list(folder.glob(".txt")) +
-                      list(folder.glob(".pdf")) + list(folder.glob(".xlsx")))
+        all_files += (list(folder.glob("*.txt")) +
+                      list(folder.glob("*.pdf")) + list(folder.glob("*.xlsx")))
 
     for file_path in all_files:
 
@@ -135,4 +135,4 @@ def ingest_documents(folder_paths: str):
 
 
 if __name__ == "__main__":
-    ingest_documents("data/hr_policies/")
+    ingest_documents(["data/hr_policies", "data/salary_grids"])
