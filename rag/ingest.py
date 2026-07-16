@@ -90,6 +90,8 @@ def ingest_documents(folder_path: str):
 
         Add the document to the on-disk vector database.
 
+        This function accepts plain-text file, pdf file and xlsx file.
+
         Arg :
 
             folder_path : the folder path of the documents.
@@ -102,10 +104,12 @@ def ingest_documents(folder_path: str):
     collection = get_collection()
     folder = Path(folder_path)
 
-    for file_path in list(folder.glob("*.txt")) + list(folder.glob("*.pdf")):
+    for file_path in list(folder.glob("*.txt")) + list(folder.glob("*.pdf")) + list(folder.glob("*.xlsx")):
 
         if file_path.suffix == ".pdf":
             text = extract_pdf_text(file_path)
+        elif file_path.suffix == ".xlsx":
+            text = extract_excel_text(file_path)
         else:
             text = file_path.read_text(encoding="utf-8")
 
