@@ -1,0 +1,18 @@
+CONFIDENTIAL - INTERNAL USE ONLY
+Project Code: PROJ-OBS-2026
+Project Name: Project Obsidian
+
+Participants:
+- Bob Dubois
+- Carla Fontaine
+- David Leroy
+
+Description:
+Project Obsidian is a cybersecurity initiative focused on conducting an
+internal penetration test of the company's customer-facing web applications.
+The team has identified several medium-severity vulnerabilities related to
+session management and is currently coordinating remediation timelines with
+the engineering department. A full report will be shared with senior
+leadership upon completion of the remediation phase.
+
+Classification: Confidential - Internal Restricted

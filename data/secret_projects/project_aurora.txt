@@ -1,0 +1,17 @@
+CONFIDENTIAL - INTERNAL USE ONLY
+Project Code: PROJ-AUR-2026
+Project Name: Project Aurora
+
+Participants:
+- Carla Fontaine
+- Frederic Nguyen
+
+Description:
+Project Aurora is a research and development effort focused on prototyping a
+machine-learning-based demand forecasting tool for the sales department. The
+current phase involves training and validating models against two years of
+historical sales data, with an emphasis on improving forecast accuracy during
+seasonal peaks. Early results have shown a measurable reduction in forecast
+error compared to the existing statistical baseline.
+
+Classification: Confidential - Internal Restricted

@@ -1,0 +1,18 @@
+CONFIDENTIAL - INTERNAL USE ONLY
+Project Code: PROJ-PHX-2026
+Project Name: Project Phoenix
+
+Participants:
+- Alice Martin
+- Bob Dubois
+- Carla Fontaine
+
+Description:
+Project Phoenix is an internal initiative to redesign the company's legacy
+inventory management system. The project aims to migrate the existing
+monolithic architecture to a microservices-based platform, improving
+scalability and reducing downtime during peak operational periods. The
+initiative is currently in the design and prototyping phase, with a target
+pilot rollout scheduled for Q3 2026.
+
+Classification: Confidential - Internal Restricted
