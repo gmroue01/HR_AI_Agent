@@ -87,5 +87,31 @@ TOOLS_SCHEMA = [
                 "required": ["expense_type", "amount", "description"]
             }
         }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "access_confidential_project",
+            "description": (
+                "Search confidential internal project files (participants, project "
+                "descriptions). This is HR-only and requires a valid access code. "
+                "If the user hasn't provided an access code yet, ask them for it "
+                "before calling this tool."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "project_code": {
+                        "type": "string",
+                        "description": "The access code provided by the user."
+                    },
+                    "query": {
+                        "type": "string",
+                        "description": "What the user wants to know about confidential projects."
+                    }
+                },
+                "required": ["project_code", "query"]
+            }
+        }
     }
 ]
