@@ -108,8 +108,13 @@ def ingest_documents(folder_path: str):
 
         if file_path.suffix == ".pdf":
             text = extract_pdf_text(file_path)
+
         elif file_path.suffix == ".xlsx":
             text = extract_excel_text(file_path)
+            collection.add(documents=[text], ids=[file_path.stem], metadatas=[
+                           {"source": file_path.name, "category": "salary_grid"}])
+            print(f"Ingested (no chunking ): {file_path.name}")
+            continue
         else:
             text = file_path.read_text(encoding="utf-8")
 
