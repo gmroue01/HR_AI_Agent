@@ -13,3 +13,12 @@ Employees can submit expenses through the chatbot. The agent checks eligibility 
 **Flow:** search policy → LLM judges eligibility → `submit_expense` → server-side limit check → accept/reject + updated total.
 
 **Current focus:** validating that the model reasons correctly about *eligibility* (e.g. accepts a late-night taxi, rejects spa treatments and parking fines per policy Article 7) — not how the limit itself is sourced (kept hardcoded for now, dynamic RAG-based extraction was prototyped and deferred). 
+
+
+## Features 3 : Salary grid
+
+Employees has acces to the salary grid through the chatbot. The salary grid is an excel file, which is stored in [`salary_grid.xlsx](../data/salary_grids/salary_grid.xlsx).
+
+**New tool:** `extract_file_excel()` is a function that enables to transform excel file into plain-text file. The chunking is not applied to this according to the fact that the excel file has rows and columns which could be split by the chunking.
+
+**Current focus:** ensure that the system deals with excel file.
