@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from rag.chroma_client import get_collection
 import pdfplumber
+import openpyxl
 
 
 def extract_pdf_text(file_path: str) -> str:
@@ -22,6 +23,38 @@ def extract_pdf_text(file_path: str) -> str:
             page_text = page.extract_text()
             if page_text:
                 text += page_text + "\n"
+    return text
+
+
+def extract_excel_text(file_path: str) -> str:
+    """
+        Extract the text from a excel file/
+
+    Arg: 
+
+        file_path : the path of PDF file.
+
+    Return:
+
+        text : the full plain-text.
+
+
+    """
+
+    wb = openpyxl.load_workbook(file_path, data_only=True)
+    text = ""
+
+    for sheet in wb.worksheets:
+        text += f"\n--sheet : {sheet.title}--\n"
+        headers = [cell.value for cell in sheet[1]]
+
+        for row in sheet.iter_rows(min_row=2, values_only=True):
+            row_text = ", ".join(
+                f"{headers[i]: {value}}" for i, value in enumerate(row) if value is not None
+            )
+            if row_text:
+                text += row_text + "\n"
+
     return text
 
 
