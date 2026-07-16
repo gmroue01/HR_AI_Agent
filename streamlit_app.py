@@ -15,8 +15,8 @@ if "chat_history" not in st.session_state:
 def show_login():
     st.title("Login")
     with st.form("login_form"):
-        surname = st.text_input("Surname")
-        name = st.text_input("Name")
+        surname = st.text_input("Surname").strip()
+        name = st.text_input("Name").strip()
         submitted = st.form_submit_button("Login")
         if submitted:
             user = login(surname, name)
@@ -50,12 +50,15 @@ def show_chat():
         with st.chat_message("user"):
             st.markdown(user_input)
         with st.spinner("Thinking..."):
-            updated_history, reply = run_agent_turn(
+            updated_history, reply, trace = run_agent_turn(
                 st.session_state.chat_history, user_input, st.session_state.user_role, employee_id=st.session_state.employee_id
             )
         st.session_state.chat_history = updated_history
         with st.chat_message("assistant"):
             st.markdown(reply)
+
+        with st.expander("Debug trace"):
+            st.json(trace)
 
 
 if st.session_state.user_role is None:
