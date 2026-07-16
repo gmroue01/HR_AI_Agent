@@ -6,9 +6,10 @@ from backend.services.employee_service import (
     filter_field_by_role,
     update_wellness_logic,
     get_employee_logic,
-    submit_expense_logic
+    submit_expense_logic,
+
 )
-from backend.services.document_service import search_hr_documents_logic
+from backend.services.document_service import search_hr_documents_logic, search_confidential_projects_logic
 
 
 def submit_expense(expense_type: str, amount: float, description: str, user_role: str = None, employee_id: int = None):
@@ -73,6 +74,19 @@ def get_all_employees(user_role: str = None, employee_id: int = None):
         return [filter_field_by_role(emp, user_role) for emp in employees]
     finally:
         db.close()
+
+
+CONFIDENTIAL_PROJECTS_PASSWORD = "1234"
+
+
+def access_confidential_project(project_code: str, query: str, user_role: str = None, employee_id: int = None):
+    if user_role != "HR":
+        return {"error": "Access restricted to HR personnel only."}
+
+    if project_code != CONFIDENTIAL_PROJECTS_PASSWORD:
+        return {"error": "Invalid password !!"}
+
+    return search_confidential_projects_logic
 
 
 AVAILABLE_FUNCTIONS = {
