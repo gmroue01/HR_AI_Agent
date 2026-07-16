@@ -134,5 +134,25 @@ def ingest_documents(folder_paths: str):
         print(f"Ingested : {file_path.name} ({len(chunks)}) chunks")
 
 
+def ingest_confidential_projects(folder_path: str):
+    collection = get_collection("confidential_projects")
+    folder = Path(folder_path)
+
+    for file_path in folder.glob("*.txt"):
+        text = file_path.read_text(encoding="utf-8")
+        chunks = chunk_test(text)
+
+        collection.add(
+            documents=chunks,
+            ids=[f"{file_path.stem}_{i}" for i in range(len(chunks))],
+            metadatas=[{"source": file_path.name,
+                        "category": "confidential_projects"} for _ in chunks]
+        )
+        print(
+            f"Ingested (confidential) : {file_path.name} ({len(chunks)} chunks )")
+
+
 if __name__ == "__main__":
-    ingest_documents(["data/hr_policies", "data/salary_grids"])
+    ingest_documents(
+        ["data/hr_policies", "data/salary_grids"])
+    ingest_confidential_projects("data/secret_projects")
