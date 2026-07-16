@@ -76,7 +76,7 @@ def get_all_employees(user_role: str = None, employee_id: int = None):
         db.close()
 
 
-CONFIDENTIAL_PROJECTS_PASSWORD = "1234"
+CONFIDENTIAL_PROJECTS_PASSWORD = "access_code_2026"
 
 
 def access_confidential_project(project_code: str, query: str, user_role: str = None, employee_id: int = None):
@@ -86,7 +86,7 @@ def access_confidential_project(project_code: str, query: str, user_role: str = 
     if project_code != CONFIDENTIAL_PROJECTS_PASSWORD:
         return {"error": "Invalid password !!"}
 
-    return search_confidential_projects_logic
+    return search_confidential_projects_logic(query)
 
 
 AVAILABLE_FUNCTIONS = {
