@@ -83,7 +83,7 @@ def chunk_test(text: str, chunk_size: int = 500, overlap: int = 50) -> list[str]
     return chunks
 
 
-def ingest_documents(folder_path: str):
+def ingest_documents(folder_paths: str):
     """
         Apply the chunk method and the embedding to every document.
         The embedding is operated by the default embedding function of ChromaDB (collection).
@@ -94,7 +94,7 @@ def ingest_documents(folder_path: str):
 
         Arg :
 
-            folder_path : the folder path of the documents.
+            folder_paths : a list of folder_path.
 
         Return :
             None
@@ -102,9 +102,14 @@ def ingest_documents(folder_path: str):
     """
 
     collection = get_collection()
-    folder = Path(folder_path)
+    all_files = []
 
-    for file_path in list(folder.glob("*.txt")) + list(folder.glob("*.pdf")) + list(folder.glob("*.xlsx")):
+    for folder_path in folder_paths:
+        folder = Path(folder_path)
+        all_files += (list(folder.glob(".txt")) +
+                      list(folder.glob(".pdf")) + list(folder.glob(".xlsx")))
+
+    for file_path in all_files:
 
         if file_path.suffix == ".pdf":
             text = extract_pdf_text(file_path)
@@ -112,7 +117,7 @@ def ingest_documents(folder_path: str):
         elif file_path.suffix == ".xlsx":
             text = extract_excel_text(file_path)
             collection.add(documents=[text], ids=[file_path.stem], metadatas=[
-                           {"source": file_path.name, "category": "salary_grid"}])
+                           {"source": file_path.name, "category": "hr_policy"}])
             print(f"Ingested (no chunking ): {file_path.name}")
             continue
         else:
