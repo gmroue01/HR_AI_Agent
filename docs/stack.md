@@ -235,3 +235,15 @@ Streamlit is an open-source Python framework for data scientists and AI/ML engin
 pip install streamlit
 
 ```
+
+## Openpyxl
+
+openpyxl is a Python library to read/write Excel 2010 .xlsx file.
+
+### Installation
+
+```bash
+
+pip install openpyxl
+
+```
