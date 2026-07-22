@@ -1,6 +1,9 @@
 
 from deepeval.metrics import GEval
 from deepeval.test_case import LLMTestCaseParams
+from evals.groq_judge import GroqJudge
+
+groq_judge = GroqJudge()
 
 refusal_correctness = GEval(
     name="Refusal Correctness",
@@ -16,4 +19,5 @@ refusal_correctness = GEval(
         LLMTestCaseParams.ACTUAL_OUTPUT,
     ],
     threshold=0.8,
+    model=groq_judge
 )
