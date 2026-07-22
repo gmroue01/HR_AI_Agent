@@ -56,7 +56,6 @@ def show_chat():
         st.session_state.chat_history = updated_history
         with st.chat_message("assistant"):
             st.markdown(reply)
-
         with st.expander("Debug trace"):
             st.json(trace)
 
