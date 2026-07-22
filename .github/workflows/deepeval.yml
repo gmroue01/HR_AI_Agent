@@ -24,9 +24,17 @@ jobs:
           pip install -e .
           pip install deepeval
 
-      - name: Initialize test database
-        run: python -c "from backend.database.init_db_sqlite3 import init_db; init_db()"
 
+      - name: Initialize test database
+        run: |
+          python -c "from backend.init_db_sqlite3 import init_db; init_db()"
+          python -c "
+          from backend.database import get_db_connection
+          db = get_db_connection()
+          db.execute(\"INSERT INTO employees (surname, name, role, salary, wellness, expense_amount) VALUES ('Test', 'User', 'employee', 3000, 'healthy', 0)\")
+          db.commit()
+          db.close()
+          "
       - name: Run deterministic PII tests (blocking, zero tolerance)
         run: pytest evals/test_role_filtering.py -v
 
