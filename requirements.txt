@@ -72,7 +72,7 @@ mmh3==5.2.1
 multidict==6.7.1
 narwhals==2.24.0
 nest-asyncio==1.6.0
-numpy==2.5.1
+numpy==2.4.6
 oauthlib==3.3.1
 onnxruntime==1.27.0
 openai==2.44.0
