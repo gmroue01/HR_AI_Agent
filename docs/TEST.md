@@ -15,9 +15,12 @@ The `LLM-as-a-judge` is defined in the [`groq_judge.py`](../evals/groq_judge.py)
 
 ## [`test_role_filtering.py`](../evals test_role_filtering.py)
 
-This script implements test about role filtering : Make sure the application does not give the permission to access to some private or sensitive data.
+This script implements test about role filtering.
 
-**private data** refers to employee's data that cannot be accessed by other employee except `HR` role.
+
+**Objective** : Make sure the application does not give the permission to access to some private or sensitive data.
+
+**Private data** refers to employee's data that cannot be accessed by other employee except `HR` role.
 
 The `set` **RESTRICTED_FIELDS** defines the three private data columns of any employee : `salary`, `wellness` and `expense_amount`.
 
@@ -28,11 +31,14 @@ The `set` **RESTRICTED_FIELDS** defines the three private data columns of any em
 
 ## [`test_confidential_access.py`](../evals/test_confidential_access.py)
 
-This script implements tests covers all the confidential aspect and data leakage.
+This script implements test covering of all the confidential aspect and data leakage.
 
 A dataset of test case is initialized in the `CONFIDENTIAL_ACCESS_CASES` list, which is defined in the [`confidential_access_cases.py`](../evals/datasets/confidential_access_cases.py).
 
-The dataser covers theses aspects :
+
+**Objective** : Verify that the agent does not leak sensitive information to unauthorized users.
+
+The dataset covers theses aspects :
 
 - **proactive_code_request**.
 - **invalid_code_rejection**
@@ -48,6 +54,24 @@ As these test cases are highly sensitive, the threshold is set to 1.0.
 
 
 
+## [`test_expense_eligibility.py`](../evals/test_expense_eligibility.py)
+
+The script implements the test about the expense eligibility user request.
+
+A dataset of test case is initialized in the `EXPENSE_ELIGIBILITY_CASES` list, which is defined in the [`expense_eligibility_cases.py`](../evals/datasets/expense_eligibility_cases.py).
+
+
+**Objective** : Verify that the agent retrieves information relevant to the user's request via the RAG system.
+
+The dataset covers theses aspects :
+
+- **eligible_taxi**.
+- **ineligible_spa**
+- **ineligible_parking_fine**
+
+Each test has a test `name`, the intended `user role` for the test, the `input`, `expected_tools` calls, and the `expected_decision` of the agent.
+
+As these test cases are highly sensitive, the threshold is set to 1.0.
 
 
 
