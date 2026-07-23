@@ -30,7 +30,7 @@ The `set` **RESTRICTED_FIELDS** defines the three private data columns of any em
 
 This script implements tests covers all the confidential aspect and data leakage.
 
-A dataset of test case is initialized in the `CONFIDENTIAL_ACCESS_CASES` list.
+A dataset of test case is initialized in the `CONFIDENTIAL_ACCESS_CASES` list, which is defined in the [`confidential_access_cases.py`](../evals/datasets/confidential_access_cases.py).
 
 The dataser covers theses aspects :
 
