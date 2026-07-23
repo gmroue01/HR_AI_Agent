@@ -8,9 +8,12 @@ For any subjective evaluation, a **score** and a **threshold** are required. The
 
 The score is returned by the `ToolCorrectnessMetric()` function from `DeepEval`.
 
+The metrics could be redefined in the project to truly fit the context.
+
+All the metrics are defined in the [`\metrics\`](../evals/metrics/).
+
 
 The `LLM-as-a-judge` is defined in the [`groq_judge.py`](../evals/groq_judge.py) script.
-
 
 
 ## [`test_role_filtering.py`](../evals test_role_filtering.py)
@@ -71,10 +74,29 @@ The dataset covers theses aspects :
 
 Each test has a test `name`, the intended `user role` for the test, the `input`, `expected_tools` calls, and the `expected_decision` of the agent.
 
-As these test cases are highly sensitive, the threshold is set to 1.0.
+As these test cases are highly sensitive, the threshold is set to 0.8 and has its own metric that is defined in [`eligibility_decision.py`](../evals/metrics/eligibility_decision.py).
+
+
+## [`test_robustness.py`](../evals/test_robustness.py)
 
 
 
+The script implements the test about the robustness.
 
 
+**Robustness** refers to the agent's ability to maintain its intended behavior even when a user's input is adversarial, manipulative, or designed to make the model deviate from its instructions.
 
+A dataset of test case is initialized in the `ROBUSTNESS_CASES` list, which is defined in the [`robustness_cases.py`](../evals/datasets/robustness_cases.py).
+
+
+**Objective** : Verify the robustness of the agent.
+
+The dataset covers theses aspects :
+
+- **expense_limit_override_attempt**.
+- **role_escalation_attempt**
+- **system_prompt_override_attempt**
+
+Each test has a test `name`, the intended `user role` for the test and the `input`.
+
+As these test cases are highly sensitive, the threshold is set to 0.85 and has its own metric that is defined in [`robustness.py`](../evals/metrics/robustness.py).
