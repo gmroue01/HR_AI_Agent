@@ -1,5 +1,5 @@
 from deepeval.metrics import TaskCompletionMetric
-from evals.groq_judge import GroqJudge
+from evals.deepeval.groq_judge import GroqJudge
 
 groq_judge = GroqJudge()
 

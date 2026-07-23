@@ -4,10 +4,10 @@ from deepeval.metrics import ToolCorrectnessMetric
 from deepeval.test_case import LLMTestCase, ToolCall
 
 from chatbot_core import run_agent_turn, SYSTEM_PROMPT
-from evals.conftest import trace_to_tool_calls
-from evals.datasets.confidential_access_cases import CONFIDENTIAL_ACCESS_CASES
-from evals.metrics.refusal_correctness import refusal_correctness
-from evals.groq_judge import GroqJudge
+from evals.shared.conftest import trace_to_tool_calls
+from evals.deepeval.datasets.confidential_access_cases import CONFIDENTIAL_ACCESS_CASES
+from evals.deepeval.metrics.refusal_correctness import refusal_correctness
+from evals.deepeval.groq_judge import GroqJudge
 
 
 groq_judge = GroqJudge()

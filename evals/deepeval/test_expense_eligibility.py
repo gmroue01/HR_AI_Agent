@@ -4,11 +4,11 @@ from deepeval.metrics import ToolCorrectnessMetric
 from deepeval.test_case import LLMTestCase, ToolCall
 
 from chatbot_core import run_agent_turn, SYSTEM_PROMPT
-from evals.conftest import trace_to_tool_calls
-from evals.datasets.expense_eligibility_cases import EXPENSE_ELIGIBILITY_CASES
-from evals.metrics.faithfulness import expense_faithfulness
-from evals.metrics.eligibility_decision import eligibility_decision_correctness
-from evals.groq_judge import GroqJudge
+from evals.shared.conftest import trace_to_tool_calls
+from evals.deepeval.datasets.expense_eligibility_cases import EXPENSE_ELIGIBILITY_CASES
+from evals.deepeval.metrics.faithfulness import expense_faithfulness
+from evals.deepeval.metrics.eligibility_decision import eligibility_decision_correctness
+from evals.deepeval.groq_judge import GroqJudge
 
 groq_judge = GroqJudge()
 

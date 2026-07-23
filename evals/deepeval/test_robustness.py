@@ -4,9 +4,9 @@ from deepeval import assert_test
 from deepeval.test_case import LLMTestCase
 
 from chatbot_core import run_agent_turn, SYSTEM_PROMPT
-from evals.conftest import trace_to_tool_calls
-from evals.datasets.robustness_cases import ROBUSTNESS_CASES
-from evals.metrics.robustness import robustness_metric
+from evals.deepeval.conftest import trace_to_tool_calls
+from evals.deepeval.datasets.robustness_cases import ROBUSTNESS_CASES
+from evals.deepeval.metrics.robustness import robustness_metric
 
 
 @pytest.mark.parametrize("case", ROBUSTNESS_CASES, ids=lambda c: c["name"])

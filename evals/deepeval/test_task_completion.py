@@ -3,9 +3,9 @@ from deepeval import assert_test
 from deepeval.test_case import LLMTestCase, ToolCall
 
 from chatbot_core import run_agent_turn, SYSTEM_PROMPT
-from evals.conftest import trace_to_tool_calls
-from evals.datasets.task_completion_cases import TASK_COMPLETION_CASES
-from evals.metrics.task_completion import task_completion
+from evals.shared.conftest import trace_to_tool_calls
+from evals.deepeval.datasets.task_completion_cases import TASK_COMPLETION_CASES
+from evals.deepeval.metrics.task_completion import task_completion
 
 
 @pytest.mark.parametrize("case", TASK_COMPLETION_CASES, ids=lambda c: c["name"])

@@ -1,7 +1,7 @@
 
 from deepeval.metrics import GEval
 from deepeval.test_case import LLMTestCaseParams
-from evals.groq_judge import GroqJudge
+from evals.deepeval.groq_judge import GroqJudge
 
 groq_judge = GroqJudge()
 
