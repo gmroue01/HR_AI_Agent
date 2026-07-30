@@ -1,8 +1,14 @@
 # Feature
 
+## Feature 1 : Wellness Status
 
-## Feature 1 : Wellness status
+Employees can update their own wellness status (`healthy`, `unhealthy`, `wait for a wellness checkup`) through the chatbot, without HR intervention. The `employee_id` is injected from the authenticated session, never supplied by the model — the same identity-bound-value principle used throughout the project — so a user can only ever update their own record, regardless of what they type.
 
+**New tool:** `update_my_wellness(wellness)` — no `employee_id` parameter exposed in the tool schema; it's bound server-side from the session instead.
+
+**Flow:** user requests a wellness update → agent calls `update_my_wellness(wellness=...)` → dispatcher injects `employee_id` from the session → `update_wellness_logic` validates the value against the same enum used by the SQLite `CHECK` constraint → record updated → agent confirms the new status.
+
+**Current focus:** validating that identity-bound tool calls (self-service actions) cannot be redirected to affect another employee's record, no matter how the request is phrased — the security boundary lives entirely in application code (the dispatcher), never in the model's judgment.
 
 ## Feature 2 : Expense Submission
 

@@ -1,6 +1,6 @@
 This document describes the `LLM-a-a-judge` logic, which is implemented in this project.
 
-The all logic is defined in [`groq_judge.py`](../evals/groq_judge.py).
+The all logic is defined in [`groq_judge.py`](../evals/deepeval/groq_judge.py).
 
 
 The model used as `LLM-as-a-judge` is **`openai/gpt-oss-120b`**.

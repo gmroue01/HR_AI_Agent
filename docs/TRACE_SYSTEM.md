@@ -7,7 +7,7 @@ The objective of this document introduce the trace system of the application, th
 A trace is a sign that something has happened or existed.
 
 In this context, `trace` is a dict variable which is assigned two elements :
-    **`"tool_called"`**: list that contains a specific json structure. The json defines the `name` of the tools, the `arguments` of the tools and the `result` value of tool function.
+    **`"tools_called"`**: list that contains a specific json structure. The json defines the `name` of the tools, the `arguments` of the tools and the `result` value of tool function.
     **`"retrieved_chunks"`** : contents retrieved throught any RAG call. These contents are appended to the `result` value.
 
 The `trace` variable is assigned after any tool calls from the model in the [`chatbot_core.py`] (../chatbot_core.py) which implements the agent logic.
@@ -21,7 +21,19 @@ The `trace` is used in any test which LLM as judge is required. It is mandatory 
 
 This argument requires a specific variable type called `ToolCall`. 
 
-That's why we implement a `trace-into-TooCall` translator as a function `trace_to_tool_calls()`in the [`conftest.py`](../evals/conftest.py) script.
+That's why we implement a `trace-into-TooCall` translator as a function `trace_to_tool_calls()`in the [`conftest.py`](../evals/shared/conftest.py) script.
+
+## Reproducible tests : resetting state between runs
+
+Tests that touch the expense flow need `employee_id=1`'s `expense_amount` to start at 0 every time, regardless of the order tests run in or of manual testing done beforehand through Streamlit. `reset_test_employee_expense()`, an `autouse` pytest fixture in [`conftest.py`](../evals/shared/conftest.py), does this reset before every test.
+
+For this fixture to actually run, pytest needs to discover it — and pytest only auto-loads a `conftest.py` from a test file's own directory and its *ancestor* directories, not from a sibling one. `evals/shared/` is a sibling of `evals/deepeval/` and `evals/trulens/`, not their ancestor, so a fixture defined only there would never fire for either framework's tests. [`evals/conftest.py`](../evals/conftest.py) — a parent of both — re-exports it :
+
+```python
+from evals.shared.conftest import reset_test_employee_expense  # noqa: F401
+```
+
+This one-line file is what makes the fixture apply to every test under `evals/`, DeepEval and TruLens alike, without either framework needing its own copy.
 
 ## Trace in a test case example
 

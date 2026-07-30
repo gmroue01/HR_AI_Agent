@@ -44,6 +44,9 @@ This method is currently :
 
 - **extract_pdf_text()**
 
+`extract_pdf_text()` also cleans the text it gets from `pdfplumber` : some fonts's bullet glyph can't be mapped to a unicode character, and `pdfplumber` leaves the raw PDF glyph id (`(cid:127)`) in the text instead. This would end up stored as-is in `ChromaDB` and reach the LLM as noise, so it is replaced by `-` right after extraction.
+
+`chunk_test()` never cuts a chunk in the middle of a word. It extends the chunk end to the next whitespace, so a chunk always ends with a complete word (a chunk can therefore be slightly longer than `chunk_size`). Without this, a fixed-size cut could land mid-word (e.g. splitting "Traffic fines" into "Traffic fi" / "nes" across two chunks), which is meaningless once embedded on its own.
 
 ## Vector databases :
 

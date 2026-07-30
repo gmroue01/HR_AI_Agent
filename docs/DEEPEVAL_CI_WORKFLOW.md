@@ -61,10 +61,12 @@ Since CI has no pre-existing `app.db` (unlike a local dev machine with accumulat
 
 ```yaml
 - name: Run deterministic PII tests (blocking, zero tolerance)
-  run: pytest evals/test_role_filtering.py -v
+  run: pytest evals/shared/test_role_filtering.py -v
 ```
 
 Runs plain pytest assertions — no LLM judge involved — that verify role-based field visibility (e.g. an `employee` role must never see `salary` or `wellness`). This step has no `continue-on-error`, meaning a failure here **fails the whole job**. This is intentional: PII leakage is a binary pass/fail concern, not something that should be softened by a threshold or treated as a warning.
+
+This test lives in `evals/shared/` rather than `evals/deepeval/` — it has no DeepEval-specific code, so the TruLens CI workflow runs the exact same file instead of duplicating it.
 
 ### 5. LLM-as-judge evaluation suite (non-blocking)
 
@@ -75,10 +77,10 @@ Runs plain pytest assertions — no LLM judge involved — that verify role-base
     GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
   run: |
     deepeval test run \
-      evals/test_confidential_access.py \
-      evals/test_expense_eligibility.py \
-      evals/test_task_completion.py \
-      evals/test_robustness.py
+      evals/deepeval/test_confidential_access.py \
+      evals/deepeval/test_expense_eligibility.py \
+      evals/deepeval/test_task_completion.py \
+      evals/deepeval/test_robustness.py
 ```
 
 Runs the full DeepEval suite: tool correctness, refusal correctness, RAG faithfulness, eligibility decision correctness, task completion, and robustness to manipulation attempts. `GROQ_API_KEY` is injected from a repository secret, since the custom `GroqJudge` model used by these metrics needs it to call the Groq API.
