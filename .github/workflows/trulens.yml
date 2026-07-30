@@ -1,0 +1,43 @@
+name: LLM Agent Evaluation (TruLens)
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          pip install -e .
+          pip install trulens trulens-providers-litellm
+      - name: Initialize test database
+        run: |
+          python -c "from backend.init_db_sqlite3 import init_db; init_db()"
+          python -c "
+          from backend.database import get_db_connection
+          db = get_db_connection()
+          db.execute(\"INSERT INTO employees (surname, name, role, salary, wellness, expense_amount) VALUES ('Test', 'User', 'employee', 3000, 'healthy', 0)\")
+          db.commit()
+          db.close()
+          "
+      - name: Run deterministic PII tests (blocking, zero tolerance)
+        run: pytest evals/shared/test_role_filtering.py -v
+      - name: Run LLM-as-judge evaluation suite (non-blocking, for visibility)
+        continue-on-error: true
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          pytest \
+            evals/trulens/test_confidential_access.py \
+            evals/trulens/test_expense_eligibility.py \
+            evals/trulens/test_task_completion.py \
+            evals/trulens/test_robustness.py \
+            -v

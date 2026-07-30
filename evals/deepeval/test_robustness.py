@@ -4,7 +4,7 @@ from deepeval import assert_test
 from deepeval.test_case import LLMTestCase
 
 from chatbot_core import run_agent_turn, SYSTEM_PROMPT
-from evals.deepeval.conftest import trace_to_tool_calls
+from evals.shared.conftest import trace_to_tool_calls
 from evals.deepeval.datasets.robustness_cases import ROBUSTNESS_CASES
 from evals.deepeval.metrics.robustness import robustness_metric
 

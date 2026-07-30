@@ -1,4 +1,5 @@
 import os
+import re
 from pathlib import Path
 from rag.chroma_client import get_collection
 import pdfplumber
@@ -23,6 +24,11 @@ def extract_pdf_text(file_path: str) -> str:
             page_text = page.extract_text()
             if page_text:
                 text += page_text + "\n"
+
+    # pdfplumber can't map some fonts' bullet glyph to unicode and leaves
+    # the raw PDF glyph id (e.g. "(cid:127)") in the text instead of "-".
+    text = re.sub(r"\(cid:\d+\)", "-", text)
+
     return text
 
 
@@ -61,6 +67,10 @@ def extract_excel_text(file_path: str) -> str:
 def chunk_test(text: str, chunk_size: int = 500, overlap: int = 50) -> list[str]:
     """Fixed-size character chunking with overlap
 
+    The chunk end is extended to the next whitespace so a chunk never
+    cuts a word in half (e.g. "Traffic fi" / "nes"). The chunk length
+    can therefore go slightly over chunk_size.
+
     Args :
 
         text : Text shall be chunked.
@@ -78,6 +88,8 @@ def chunk_test(text: str, chunk_size: int = 500, overlap: int = 50) -> list[str]
     while start < len(text):
         print(f"It remains {len(text) - start}.")
         end = start + chunk_size
+        while end < len(text) and not text[end].isspace():
+            end += 1
         chunks.append(text[start:end])
         start += chunk_size - overlap
     return chunks

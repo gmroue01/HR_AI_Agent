@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 import json
-from groq import Groq
+from groq import Groq, BadRequestError
 from tools.schemas import TOOLS_SCHEMA
 from tools.dispatcher import AVAILABLE_FUNCTIONS
 
@@ -122,9 +122,20 @@ def run_agent_turn(chat_history: list, user_message: str, user_role: str, employ
                 "content": json.dumps(results, default=str)
             })
 
-    final_response = client.chat.completions.create(
-        model=MODEL, messages=chat_history, tools=TOOLS_SCHEMA, tool_choice="none"
-    )
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            final_response = client.chat.completions.create(
+                model=MODEL, messages=chat_history
+            )
+            break
+        except BadRequestError:
+            # gpt-oss-120b occasionally keeps emitting a tool-call-shaped
+            # string from the tool-heavy history above even with no tools
+            # declared on this call; Groq rejects that shape outright.
+            # Retrying re-samples the generation instead of hard-failing.
+            if attempt == max_retries - 1:
+                raise
 
     final_message = final_response.choices[0].message
     chat_history.append(

@@ -81,7 +81,7 @@ CONFIDENTIAL_PROJECTS_PASSWORD = "access_code_2026"
 
 def access_confidential_project(project_code: str, query: str, user_role: str = None, employee_id: int = None):
     if user_role != "HR":
-        return {"error": "Access restricted to HR personnel only."}
+        return {"error": "Access denied."}
 
     if project_code != CONFIDENTIAL_PROJECTS_PASSWORD:
         return {"error": "Invalid password !!"}

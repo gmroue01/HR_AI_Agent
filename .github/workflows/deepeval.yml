@@ -29,7 +29,7 @@ jobs:
           db.close()
           "
       - name: Run deterministic PII tests (blocking, zero tolerance)
-        run: pytest evals/deepeval/test_role_filtering.py -v
+        run: pytest evals/shared/test_role_filtering.py -v
       - name: Run LLM-as-judge evaluation suite (non-blocking, for visibility)
         continue-on-error: true
         env:
