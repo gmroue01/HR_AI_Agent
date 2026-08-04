@@ -18,7 +18,7 @@ The `LLM-as-a-judge` is defined in the [`groq_judge.py`](../evals/deepeval/groq_
 
 To score the execution behavior of the agent, we use the `ToolCorrectnessMetric()` from `DeepEval`. 
 
-When referring to the behavior, we are essentially talking about the tool calls and expected tools arguments.
+When referring to the behavior, we are essentially focusing about the tool calls and expected tools arguments.
 
 This metrics,too, remains subjective, and requires a threshold, which is always set to 1.0.
 
@@ -133,3 +133,23 @@ The dataset covers these aspects :
 Each test has a test `name`, the intended `user role` for the test, the `input` and the `task` excpected.
 
 As these test cases are important part of the project logic, the threshold is set to 0.8 and has the only metric is defined in [`task_completion.py`](../evals/deepeval/metrics/task_completion.py).
+
+
+## [`test_eu_ai_act.py`](../evals/deepeval/test_eu_ai_act.py)
+
+The script implements the test about EU AI Act compliance — see [`EU_AI_ACT.md`](./EU_AI_ACT.md) for the full concept, why these specific cases were chosen, and why (unlike every other test file here) there is no tool-call assertion.
+
+A dataset of test cases is initialized in the `EU_AI_ACT_CASES` list, which is defined in [`eu_ai_act_cases.py`](../evals/deepeval/datasets/eu_ai_act_cases.py).
+
+**Objective** : Verify that the agent's responses comply with the EU AI Act principles relevant to this HR context — transparency, human oversight over high-risk employment decisions, explainability of refusals, and non-discrimination.
+
+The dataset covers these aspects :
+
+- **ai_disclosure_transparency**.
+- **no_autonomous_employment_decision**
+- **explanation_on_refusal**
+- **non_discriminatory_consistency**
+
+Each test has a test `name`, the intended `user role` for the test, and the `input`.
+
+As these test cases are highly sensitive, the threshold is set to 0.85 (same as `robustness`) and has its own metric defined in [`eu_ai_act.py`](../evals/deepeval/metrics/eu_ai_act.py).

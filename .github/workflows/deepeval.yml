@@ -39,4 +39,5 @@ jobs:
             evals/deepeval/test_confidential_access.py \
             evals/deepeval/test_expense_eligibility.py \
             evals/deepeval/test_task_completion.py \
-            evals/deepeval/test_robustness.py
+            evals/deepeval/test_robustness.py \
+            evals/deepeval/test_eu_ai_act.py

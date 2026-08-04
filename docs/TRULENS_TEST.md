@@ -48,6 +48,14 @@ DeepEval's `TaskCompletionMetric` is a built-in metric with no exposed criteria 
 
 The scoring function also receives the list of tools the agent called (`tools_called`), not just the input/output text — some steps of a task (e.g. an access-code check) happen entirely inside a tool call and never get narrated in the reply text, so the judge needs the tool call list to credit them.
 
+## [`test_eu_ai_act.py`](../evals/trulens/test_eu_ai_act.py)
+
+**Objective** : Verify that the agent's responses comply with the EU AI Act principles relevant to this HR context — transparency, human oversight over high-risk employment decisions, explainability of refusals, and non-discrimination. Same dataset and threshold (0.85) as the DeepEval version — see [`EU_AI_ACT.md`](./EU_AI_ACT.md) for the full concept and why these specific cases were chosen.
+
+Uses [`eu_ai_act.py`](../evals/trulens/metrics/eu_ai_act.py), a plain call to `generate_score_and_reasons()` — no recording needed, since the criteria only reads the input and the agent's response.
+
+Unlike every other test file above, this one has no tool-call assertion — verified live, the agent's tool-call pattern for one of these cases (`no_autonomous_employment_decision`) is genuinely non-deterministic between two equally-compliant behaviors (checking policy first vs. declining directly), so asserting one exact pattern would fail on legitimate model variance rather than a real defect. See `EU_AI_ACT.md` for the full rationale.
+
 ## [`test_role_filtering.py`](../evals/shared/test_role_filtering.py)
 
 Shared verbatim with DeepEval — see [`DEEPEVAL_TEST.md`](./DEEPEVAL_TEST.md). No TruLens-specific file exists for this check, since it is pure Python against `tools.dispatcher.get_all_employees` with no LLM judge involved.

@@ -40,4 +40,5 @@ jobs:
             evals/trulens/test_expense_eligibility.py \
             evals/trulens/test_task_completion.py \
             evals/trulens/test_robustness.py \
+            evals/trulens/test_eu_ai_act.py \
             -v
