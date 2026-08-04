@@ -1,5 +1,5 @@
 
-This document explain all the aspect of the backend architecture and technical choice.
+This document explains all the aspect of the backend architecture and the technical choices.
 
 ## Pydantic Usage: Type Hinting & Validation [`models.py`](./models.py)
 
