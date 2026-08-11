@@ -1,0 +1,41 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+
+# Functional benchmark for Promptfoo — the 3 aspects named in goals.md:
+# EU AI Act compliance (agent answer), RAG faithfulness (hallucination / RAG
+# triad), and tool-calling correctness. Reuses the exact same case sets as
+# DeepEval/TruLens/Opik (evals/shared/cases/) and the same judge model
+# (groq:openai/gpt-oss-120b) for a fair, apples-to-apples benchmark.
+#
+# Run from the repo root:
+#   npx promptfoo eval -c evals/promptfoo/promptfooconfig.yaml
+#
+# This is separate from the root-level promptfooconfig.yaml / redteam.yaml,
+# which cover security/red-teaming (bias, PII, RBAC, jailbreaks) — an
+# orthogonal concern to this functional benchmark.
+description: "HR_AgentIA functional benchmark (EU AI Act, RAG faithfulness, tool calling)"
+
+prompts:
+  - "{{query}}"
+
+providers:
+  - file://provider.py
+
+# All model-graded assertions (context-faithfulness) use the same judge model
+# as the other three frameworks. The custom `python` assertions call this same
+# model directly via groq_judge.py, bypassing this provider entirely.
+defaultTest:
+  options:
+    provider: groq:openai/gpt-oss-120b
+
+# Test cases share one employee's DB row (employee_id=1, reset before every
+# call in provider.py) — run sequentially to avoid cross-test races, same
+# effective behavior as the other frameworks' pytest suites.
+evaluateOptions:
+  maxConcurrency: 1
+
+tests:
+  - file://test_task_completion.py:generate_tests
+  - file://test_expense_eligibility.py:generate_tests
+  - file://test_confidential_access.py:generate_tests
+  - file://test_robustness.py:generate_tests
+  - file://test_eu_ai_act.py:generate_tests

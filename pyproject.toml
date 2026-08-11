@@ -19,3 +19,7 @@ include = ["backend*", "tools*", "rag*"]
 eval = ["deepeval", "pytest"]
 trulens = ["trulens", "trulens-providers-litellm", "pytest"]
 opik = ["opik", "litellm", "pytest"]
+
+[tool.pytest.ini_options]
+addopts = "--reruns 3 --reruns-delay 20 --only-rerun RateLimitError"
+pythonpath = ["."]

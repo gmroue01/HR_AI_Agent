@@ -1,0 +1,30 @@
+{
+  "name": "hr_agentia",
+  "version": "1.0.0",
+  "description": "The purpose of the repository is to benchmark on a specific and concrete use-case a set of tools for evaluating LLM application. The tools chosen are Promptfoo, DeepEval, TrueLens, Opik.  Check the readme.md for more informations.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "e2e"
+  },
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gmroue01/HR_AI_Agent.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/gmroue01/HR_AI_Agent/issues"
+  },
+  "homepage": "https://github.com/gmroue01/HR_AI_Agent#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^26.2.0"
+  }
+}

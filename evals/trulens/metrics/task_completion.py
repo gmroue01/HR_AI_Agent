@@ -2,9 +2,7 @@ from evals.trulens.litellm_provider import provider
 
 THRESHOLD = 0.8
 
-# DeepEval's TaskCompletionMetric (evals/deepeval/metrics/task_completion.py) is a
-# built-in metric with no exposed criteria text to mirror, so this rubric is
-# authored fresh rather than copied.
+
 CRITERIA = (
     "Given the task the agent was expected to accomplish, determine whether "
     "the agent's response and actions fully complete it. Partial completion "
@@ -14,10 +12,7 @@ CRITERIA = (
 
 
 def score_task_completion(input_text: str, actual_output: str, task: str, tools_called: list[str] = None) -> tuple[float, dict]:
-    # Some verification/side-effect steps (e.g. an access-code check) happen
-    # inside a tool call, not in the visible reply text — the judge needs the
-    # tool call list to credit those, the same way DeepEval's built-in
-    # TaskCompletionMetric is given tools_called in the LLMTestCase.
+
     tools_block = ", ".join(tools_called) if tools_called else "(none)"
     system_prompt = (
         f"{CRITERIA}\n\n"

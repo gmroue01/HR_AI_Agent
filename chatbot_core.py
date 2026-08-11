@@ -5,6 +5,7 @@ from groq import Groq, BadRequestError
 from tools.schemas import TOOLS_SCHEMA
 from tools.dispatcher import AVAILABLE_FUNCTIONS
 
+
 load_dotenv()
 
 API_KEY = os.environ.get("GROQ_API_KEY")

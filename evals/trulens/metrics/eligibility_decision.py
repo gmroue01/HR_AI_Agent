@@ -2,8 +2,7 @@ from evals.trulens.litellm_provider import provider
 
 THRESHOLD = 0.8
 
-# Same wording as evals/deepeval/metrics/eligibility_decision.py's GEval criteria,
-# so both frameworks judge this scenario against the same rubric.
+
 CRITERIA = (
     "Given the retrieved expense policy context, determine whether the "
     "agent's accept/refuse decision matches what the policy actually states. "

@@ -4,12 +4,12 @@ from opik import opik_context
 from chatbot_core import run_agent_turn, SYSTEM_PROMPT
 
 PROJECT_NAME = "HR_AgentIA"  # kept distinct from the pre-existing
-                             # "Opik Demo Agent Observability" project
-                             # already in this same local Opik install
+# "Opik Demo Agent Observability" project
+# already in this same local Opik install
 
 
 class HRAgentApp:
-    @opik.track(name="run_agent_turn", type="general", project_name=PROJECT_NAME)
+    @opik.track(entrypoint=True, name="run_agent_turn", type="general", project_name=PROJECT_NAME)
     def run(self, user_message: str, user_role: str, employee_id: int) -> str:
         chat_history = [SYSTEM_PROMPT]
         _, reply, trace = run_agent_turn(
