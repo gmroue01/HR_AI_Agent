@@ -7,6 +7,7 @@ from chatbot_core import run_agent_turn, SYSTEM_PROMPT
 from evals.shared.conftest import trace_to_tool_calls
 from evals.deepeval.datasets.expense_eligibility_cases import EXPENSE_ELIGIBILITY_CASES
 from evals.deepeval.metrics.faithfulness import expense_faithfulness
+from evals.deepeval.metrics.answer_relevancy import expense_answer_relevancy
 from evals.deepeval.metrics.eligibility_decision import eligibility_decision_correctness
 from evals.deepeval.groq_judge import GroqJudge
 
@@ -44,4 +45,4 @@ def test_expense_eligibility_case(case):
     tool_metric = ToolCorrectnessMetric(threshold=1.0, model=groq_judge)
 
     assert_test(test_case, [
-                tool_metric, expense_faithfulness, eligibility_decision_correctness])
+                tool_metric, expense_faithfulness, expense_answer_relevancy, eligibility_decision_correctness])

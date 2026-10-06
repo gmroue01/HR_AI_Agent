@@ -25,6 +25,9 @@
   "homepage": "https://github.com/gmroue01/HR_AI_Agent#readme",
   "devDependencies": {
     "@playwright/test": "^1.62.1",
-    "@types/node": "^26.2.0"
+    "@types/node": "^26.2.0",
+    "dotenv": "^16.5.0",
+    "opik": "^2.2.28",
+    "zod": "^3.25.55"
   }
 }

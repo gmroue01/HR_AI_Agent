@@ -25,6 +25,11 @@ _metric = GEval(
     track=False,
 )
 
+# Public alias — evals/shared/regression_experiment.py reuses this exact
+# GEval instance as an opik.evaluate() scoring metric, instead of
+# constructing a second, possibly-drifting copy of the same judge/criteria.
+metric = _metric
+
 
 def score_eligibility_decision(input_text: str, actual_output: str, retrieval_context: list[str]) -> tuple[float, dict]:
     context_block = "\n---\n".join(retrieval_context)

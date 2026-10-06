@@ -4,6 +4,7 @@ EXPENSE_ELIGIBILITY_CASES = [
         "user_role": "employee",
         "input": "I'd like to submit a 45 EUR taxi expense for a late-night client meeting",
         "expected_tools": ["search_hr_documents", "submit_expense"],
+        "optional_tools": ["get_my_info"],
         "expected_decision": "accepted",
     },
     {

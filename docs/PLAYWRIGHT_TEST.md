@@ -4,6 +4,8 @@ Unlike every other suite in this project, this one does not import the agent's P
 
 One consequence of testing through the browser is that the LLM call in `chatbot_core.run_agent_turn()` happens server-side, inside the Streamlit Python process — there is no client-side `fetch`/`XHR` for Playwright's `page.route()` to intercept, so this suite cannot mock the model the way [`MOCKING_TEST.md`](./MOCKING_TEST.md) does. Every chat test here calls the real Groq API.
 
+See [`SELENIUM_TEST.md`](./SELENIUM_TEST.md) for a 1:1 port of this same coverage driven with Selenium/`pytest` instead of Playwright/TypeScript.
+
 ## Configuration ([`playwright.config.ts`](../playwright.config.ts))
 
 - `testDir: './e2e'`, `baseURL: 'http://localhost:8501'` (Streamlit's default port).
@@ -41,3 +43,15 @@ Every test logs in first (as the employee `Gabriel`/`Mroue`) via a shared `login
 - **`keeps both messages visible after a full exchange`** — after one exchange, exactly two `stChatMessage` bubbles exist (one user, one assistant).
 
 Because these tests hit the real API, they consume Groq quota on every run and their duration depends on real model latency — that's an intentional trade-off for testing the actual end-to-end path; see [`MOCKING_TEST.md`](./MOCKING_TEST.md) for the free, deterministic alternative that tests the surrounding orchestration logic without it.
+
+## [`judge.spec.ts`](../e2e/judge.spec.ts)
+
+**Objective** : Go one step further than `chat.spec.ts`'s structural check ("did a reply appear, is it non-empty") by running an actual LLM-as-judge metric against the reply exactly as rendered in the real browser session — the same kind of check the DeepEval/TruLens/Opik/Promptfoo suites run directly against `chatbot_core.run_agent_turn()` in Python (see [`TESTING_OVERVIEW.md`](./TESTING_OVERVIEW.md)), but reached through the real UI instead of a direct function call.
+
+This is possible without a Python bridge because Opik ships a genuine TypeScript SDK (`opik` on npm) with real judge metrics — `GEval`, `Hallucination`, `AnswerRelevance`, and more — not just tracing, and Playwright already runs in the same Node.js runtime. The one gap : Opik's TS SDK has no Groq provider out of the box (only OpenAI/Anthropic/Google/Vertex via the Vercel AI SDK), so [`groq-judge-model.ts`](../e2e/groq-judge-model.ts) implements a minimal `OpikBaseModel` subclass wrapping Groq's OpenAI-compatible endpoint with plain `fetch` — the TypeScript equivalent of `evals/deepeval/groq_judge.py`'s `GroqJudge`.
+
+- **`the reply rendered in the browser passes an LLM-as-judge quality check`** — sends a message, waits for the assistant reply, and scores it with a `GEval` metric (`HR Reply Quality`, criteria: coherent, on-topic for an HR assistant, not an error/refusal) built on `GroqJudgeModel`. Asserts `result.value >= 0.7`.
+
+**A real bug this caught.** The first version of this test scoped the captured reply to `stChatMessage` (the whole message bubble), the same locator `chat.spec.ts` already used. That bubble also contains the assistant avatar, whose Material icon renders as literal ligature text (`"smart_toy"`) in `innerText()` — harmless for `chat.spec.ts`'s non-empty-length check, but the judge scored the contaminated text low, since it read `"smart_toy"` as if it were part of the actual message. Scoping the locator to `[data-testid="stChatMessageContent"]` (the sibling div holding just the markdown content, excluding the avatar) fixed it. See [`SELENIUM_TEST.md`](./SELENIUM_TEST.md) for the same fix on the Selenium side.
+
+Requires `GROQ_API_KEY` in Node's `process.env` — unlike every other spec file, which never touches Groq directly since the real call happens server-side in the Streamlit Python process. `playwright.config.ts` loads it from `.env` via `dotenv` for this reason.

@@ -3,10 +3,16 @@ import { defineConfig, devices } from '@playwright/test';
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
+ *
+ * Needed since judge.spec.ts calls Groq directly from Node (via a custom
+ * OpikBaseModel) to run an LLM-as-judge metric on the UI's real output —
+ * every other spec file only drives the browser and never touches
+ * GROQ_API_KEY itself, since the real Groq call happens server-side in the
+ * Streamlit Python process instead.
  */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+import dotenv from 'dotenv';
+import path from 'path';
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 /**
  * See https://playwright.dev/docs/test-configuration.

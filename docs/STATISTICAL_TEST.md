@@ -1,4 +1,4 @@
-This document gathers the test function documentation for the statistical-testing suite in [`evals/shared/test_mcnemar_expense_eligibility.py`](../evals/shared/test_mcnemar_expense_eligibility.py).
+This document gathers the test function documentation for the statistical-testing suites in `evals/shared/` : [`test_mcnemar_expense_eligibility.py`](../evals/shared/test_mcnemar_expense_eligibility.py) (does paraphrasing systematically change correctness?) and [`test_pass_at_k_expense_eligibility.py`](../evals/shared/test_pass_at_k_expense_eligibility.py) (given k tries at the same input, how reliably does the agent get it right?).
 
 [`METAMORPHIC_TEST.md`](./METAMORPHIC_TEST.md)'s suite checks a metamorphic relation (rewording shouldn't change the tools called) on a single pair per case — one original run, one paraphrase run, exact equality. That's a strong claim from a weak amount of evidence : a single Groq call is one draw from the model's sampling distribution, so a single pair matching (or not) could easily be noise rather than a real property of the model. This suite asks the same underlying question — does paraphrasing affect correctness? — but answers it with a statistical test over repeated sampling instead of a single exact-match assertion, which is what "statistical testing" adds on top of the metamorphic relation : a p-value quantifying how likely the observed disagreement is to be chance.
 
@@ -17,3 +17,25 @@ This document gathers the test function documentation for the statistical-testin
 **Observed result** : a real run (30 paired trials, 60 Groq calls, ~9m30s) came back with zero discordant pairs — original and paraphrase agreed (correct or incorrect together) on every single trial, so the test skipped rather than computing a p-value. That is itself informative : it says the model's tool-call decision on these three cases is highly stable under rewording, stable enough that 30 repetitions never once caught it disagreeing with itself. It also means this particular dataset hasn't yet produced a case for McNemar's test to actually rule on — a case where the two conditions sometimes disagree would be needed to see the test reject or fail to reject a real effect.
 
 Run with `pytest evals/shared/test_mcnemar_expense_eligibility.py -v -s` (`-s` to see `print`/assertion detail; expect several minutes given 60 real API calls).
+
+## [`test_pass_at_k_expense_eligibility.py`](../evals/shared/test_pass_at_k_expense_eligibility.py)
+
+McNemar and the metamorphic test both ask a *comparative* question — does condition A (original) differ from condition B (paraphrase)? **pass@k** asks something else entirely: given `k` independent tries at the exact same input, what's the probability the agent gets it right at least once? It's the standard reliability metric from code-generation benchmarking (Codex/HumanEval), repurposed here for tool-calling reliability instead of unit-test-passing code.
+
+**Why the unbiased estimator, not "just resample k times".** Naively drawing exactly `k` samples and checking if any succeeded is a valid but noisy, wasteful way to estimate this probability — it throws away information from any samples beyond `k`. The [Codex paper](https://arxiv.org/abs/2107.03374)'s estimator instead draws a larger `n >= k` samples once, counts `c` correct ones, and computes the exact probability that a random unordered draw of `k` from those `n` samples contains at least one correct one:
+
+```
+pass@k = 1 - C(n-c, k) / C(n, k)
+```
+
+`pass_at_k()` computes this with a numerically stable product form (`1 - prod((n-c-i)/(n-i) for i in range(k))`) instead of raw binomial coefficients, which overflow for large `n`. Verified against a brute-force `math.comb()` implementation for several `(n, c, k)` combinations before use.
+
+**Correctness criterion.** Same exact-match tool-set proxy as McNemar and the metamorphic test — `tools_called == expected_tools`, no LLM judge, so pass@k measures the agent's own sampling reliability, not variance in a judge's opinion.
+
+**Cost.** `REPETITIONS = 10` samples of the *original* input only (no paraphrase arm), so 10 real Groq calls per case — a third of McNemar's 60-calls-per-run cost, since there's no second condition to sample.
+
+- **`test_pass_at_k_meets_threshold`** — parametrized over the same three cases as McNemar. Draws 10 samples of the case's original input, counts how many called exactly `expected_tools`, computes `pass@3`, and asserts it's `>= 0.7` (`PASS_AT_K_THRESHOLD`, a starting point, not derived from any formal analysis — same caveat as `AGREEMENT_TOLERANCE` in [`JUDGE_CALIBRATION.md`](./JUDGE_CALIBRATION.md)).
+
+**Observed result** : a real run (10 repetitions x 3 cases, 30 real Groq calls, ~4m45s) came back 2/3 passing. `ineligible_spa` and `ineligible_parking_fine` (single expected tool each) both scored a clean pass@3. `eligible_taxi` scored **pass@3 = 0.000** — 0 out of 10 repetitions called the exact three-tool set `["search_hr_documents", "get_my_info", "submit_expense"]`, which had briefly become that case's `expected_tools` after a single earlier real run happened to include `get_my_info` (see [`EVALUATION_METRICS.md`](./EVALUATION_METRICS.md#handling-non-determinism)). This is exactly the kind of finding pass@k exists to surface : across 10 fresh samples the three-tool combination essentially never recurred, meaning that single-run edit had encoded the exception as if it were the rule. `expected_tools` for `eligible_taxi` has since been reverted to `["search_hr_documents", "submit_expense"]` in `evals/shared/cases/expense_eligibility.py` on the strength of this result.
+
+Run with `pytest evals/shared/test_pass_at_k_expense_eligibility.py -v -s`.
