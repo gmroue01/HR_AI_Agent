@@ -37,6 +37,8 @@ evals/
   agentevals/            Tool-call trajectory tests
 e2e/                     Playwright E2E tests (+ an LLM-judge test on real UI output)
 e2e_selenium/            Selenium E2E tests (+ an LLM-judge test on real UI output)
+redteam/                 Promptfoo red-teaming config (bias, PII, RBAC, jailbreaks) — separate
+                          from the functional benchmark in evals/promptfoo/
 
 docs/                    The actual deliverable — one .md per concept/framework/test type
 ```
@@ -91,6 +93,9 @@ pytest evals/shared/
 # E2E
 npx playwright test          # e2e/
 pytest e2e_selenium/
+
+# Red-teaming (security — bias, PII, RBAC, jailbreaks), from redteam/
+npx promptfoo redteam run -c redteam/promptfooconfig.yaml
 ```
 
 Most `evals/` tests make real Groq API calls and are subject to Groq's shared rate limits (see [`docs/REGRESSION_MONITORING.md`](./docs/REGRESSION_MONITORING.md)); `pytest` is configured to auto-retry on `RateLimitError` (see `pyproject.toml`).

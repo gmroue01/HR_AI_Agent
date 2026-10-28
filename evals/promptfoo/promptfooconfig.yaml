@@ -9,7 +9,7 @@
 # Run from the repo root:
 #   npx promptfoo eval -c evals/promptfoo/promptfooconfig.yaml
 #
-# This is separate from the root-level promptfooconfig.yaml / redteam.yaml,
+# This is separate from redteam/promptfooconfig.yaml and redteam/redteam.yaml,
 # which cover security/red-teaming (bias, PII, RBAC, jailbreaks) — an
 # orthogonal concern to this functional benchmark.
 description: "HR_AgentIA functional benchmark (EU AI Act, RAG faithfulness, tool calling)"

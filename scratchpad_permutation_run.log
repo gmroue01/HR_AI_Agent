@@ -1,0 +1,25 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.2, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\gmrou\HR_AgentIA\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\gmrou\HR_AgentIA
+configfile: pyproject.toml
+plugins: anyio-4.14.1, deepeval-4.1.0, langsmith-0.9.8, opik-2.2.11, asyncio-1.4.0, repeat-0.9.4, rerunfailures-16.4, xdist-3.8.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 1 item
+
+evals/shared/test_permutation_expense_eligibility.py::test_paraphrase_has_no_significant_effect_on_eligibility_score RERUN
+evals/shared/test_permutation_expense_eligibility.py::test_paraphrase_has_no_significant_effect_on_eligibility_score PASSEDRunning teardown with pytest sessionfinish...
+
+
+============================== warnings summary ===============================
+evals\deepeval\metrics\eligibility_decision.py:3
+evals\deepeval\metrics\eligibility_decision.py:3
+  C:\Users\gmrou\HR_AgentIA\evals\deepeval\metrics\eligibility_decision.py:3: DeprecationWarning: 'LLMTestCaseParams' is deprecated and will be removed in a future release. Use 'SingleTurnParams' instead.
+    from deepeval.test_case import LLMTestCaseParams
+
+evals/shared/test_permutation_expense_eligibility.py::test_paraphrase_has_no_significant_effect_on_eligibility_score
+  C:\Users\gmrou\HR_AgentIA\venv\Lib\site-packages\deepeval\utils.py:211: DeprecationWarning: There is no current event loop
+    loop = asyncio.get_event_loop()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============= 1 passed, 3 warnings, 1 rerun in 1283.37s (0:21:23) =============

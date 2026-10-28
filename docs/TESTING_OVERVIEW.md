@@ -1,6 +1,6 @@
 This document gives a single map of every test suite built for this project, and how they relate to each other. Every suite listed here has its own dedicated documentation — this page exists because none of those pages, read individually, show how the pieces connect.
 
-Testing an LLM agent can't be done with one technique alone. A single assertion like `assert reply == "Bruxelles"` doesn't survive contact with a model that can phrase a correct answer a dozen different ways (see the non-determinism problem in `presentation_pw.md`). So this project layers several different testing strategies, each answering a different question about the same underlying agent, `chatbot_core.run_agent_turn()`:
+Testing an LLM agent can't be done with one technique alone. A single assertion like `assert reply == "Bruxelles"` doesn't survive contact with a model that can phrase a correct answer a dozen different ways — "Brussels", "The capital is Brussels", "Belgium's capital is Brussels" are all correct, so string equality is the wrong tool entirely. So this project layers several different testing strategies, each answering a different question about the same underlying agent, `chatbot_core.run_agent_turn()`:
 
 - **Unit** : is the orchestration code (history management, tool dispatch, error handling) correct, independently of what the model says?
 - **Functional / E2E** : does the real, deployed app work for a real user clicking through a real browser?
@@ -105,7 +105,7 @@ The exact same line appears in `evals/trulens/datasets/`, `evals/opik/datasets/`
 | Regression | Metamorphic test | [`METAMORPHIC_TEST.md`](./METAMORPHIC_TEST.md) |
 | Regression | McNemar statistical test | [`STATISTICAL_TEST.md`](./STATISTICAL_TEST.md) |
 | Regression | pass@k reliability test | [`STATISTICAL_TEST.md`](./STATISTICAL_TEST.md) — validated (2/3 real), 1 finding open |
-| Regression | Permutation statistical test | *(pending real-run validation)* |
+| Regression | Permutation statistical test | [`STATISTICAL_TEST.md`](./STATISTICAL_TEST.md) — validated (real run, passed) |
 | Regression | AgentEvals trajectory test | validated (2/3 real, 1 finding under review) — *(pending documentation)* |
 | Meta / judge calibration | `evals/shared/test_judge_calibration.py` | [`JUDGE_CALIBRATION.md`](./JUDGE_CALIBRATION.md) — skeleton only, unlabeled |
 | Regression | Opik Dataset/evaluate() drift monitoring (`evals/shared/regression_experiment.py`) | [`REGRESSION_MONITORING.md`](./REGRESSION_MONITORING.md) — manual only, no scheduler yet |

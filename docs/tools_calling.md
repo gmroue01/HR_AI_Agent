@@ -2,8 +2,8 @@
 
 ## 1. Declaring the tools to the model
 
-On every API agent call in [`chatbot.py`](../chatbot.py), the `TOOLS_SCHEMA` from 
-[`schema.py`](../tools/schema.py) is passed to describe the available functions the agent 
+On every API agent call in [`chatbot_core.py`](../chatbot_core.py), the `TOOLS_SCHEMA` from 
+[`schemas.py`](../tools/schemas.py) is passed to describe the available functions the agent 
 can call.
 
 `TOOLS_SCHEMA` is a list of objects, each containing the following fields:
@@ -55,7 +55,7 @@ It keeps a list of functions available to the agent, called `AVAILABLE_FUNCTION`
 
 In the main script, this list is always checked before any function is called.
 
-The script [`employee_service.py`](../services/employee_service.py) implements all the logic behind any of the available tools.
+The script [`employee_service.py`](../backend/services/employee_service.py) implements all the logic behind any of the available tools.
 
 The script `database.py` contains the database connection logic.
 
@@ -64,7 +64,7 @@ These functions are the only ones required to allow the agent to access tools.
 ## 4. Second call — sending results back to the model
 
 Once every tool call has been executed and its result appended to `chat_history` 
-(see ['chatbot.py'](./ARCHITECTURE/CHATBOT.md)),the full conversation — the 
+(see [`CHATBOT.md`](./CHATBOT.md)), the full conversation — the 
 original user prompt, the assistant's tool call decision, and each tool's result — 
 is sent back to the model in a second call to `client.chat.completions.create()`.
 

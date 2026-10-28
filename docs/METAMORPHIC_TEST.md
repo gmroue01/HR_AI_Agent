@@ -15,3 +15,15 @@ Both the original and the paraphrased input go through the real `chatbot_core.ru
 - **`test_paraphrase_does_not_change_the_tools_called`** — parametrized over `eligible_taxi`, `ineligible_spa`, and `ineligible_parking_fine`. Runs `run_agent_turn()` once with the case's original `input` and once with its paraphrase from `EXPENSE_ELIGIBILITY_PARAPHRASES`, and asserts the two runs produce the same set of tool names.
 
 Run with `pytest evals/shared/test_metamorphic_expense_eligibility.py -v`.
+
+## Real run
+
+```
+evals/shared/test_metamorphic_expense_eligibility.py::test_paraphrase_does_not_change_the_tools_called[eligible_taxi] PASSED
+evals/shared/test_metamorphic_expense_eligibility.py::test_paraphrase_does_not_change_the_tools_called[ineligible_spa] PASSED
+evals/shared/test_metamorphic_expense_eligibility.py::test_paraphrase_does_not_change_the_tools_called[ineligible_parking_fine] PASSED
+
+3 passed in 50.28s
+```
+
+All 3 cases passed on a single run, 6 real Groq calls (2 per case), no rate-limiting. For `eligible_taxi`, the original input (*"I'd like to submit a 45 EUR taxi expense for a late-night client meeting"*) and its paraphrase (*"Could you help me file an expense claim? I took a taxi home after a client meeting that ran late, it cost me 45 euros."*) produced the same tool set, and likewise for the two refusal cases — confirming the model's tool-choice behavior doesn't depend on the exact wording of the request.
