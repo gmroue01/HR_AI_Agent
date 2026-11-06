@@ -75,6 +75,49 @@ python -c "from rag.ingest import ingest_confidential_projects; ingest_confident
 streamlit run streamlit_app.py
 ```
 
+### Test accounts
+
+Login is by surname + name only — no password (see `backend/auth.py`). `backend/app.db` ships seeded with generic test identities:
+
+| Surname  | Name  | Role       |
+|----------|-------|------------|
+| Employee | One   | employee   |
+| Employee | Two   | employee   |
+| Employee | Three | employee   |
+| Manager  | One   | HR         |
+| Manager  | Two   | HR         |
+
+Use an `Employee` account to test expense submission, wellness self-updates, and the salary grid; use a `Manager` account to test wellness lookups/updates on any employee and confidential project access.
+
+### Adding employees
+
+Two ways to add one, both ending up in the same `backend/app.db` table (`role` must be `"employee"` or `"HR"`; `wellness` one of `"healthy"`, `"unhealthy"`, `"wait for a wellness checkup"`):
+
+**Directly, no server needed:**
+
+```bash
+python -c "
+from backend.database import get_db_connection
+db = get_db_connection()
+db.execute(
+    'INSERT INTO employees (surname, name, role, salary, wellness, expense_amount) VALUES (?, ?, ?, ?, ?, ?)',
+    ('Employee', 'Four', 'employee', 3000, 'healthy', 0),
+)
+db.commit()
+db.close()
+"
+```
+
+**Via the FastAPI backend** — start it with `uvicorn backend.main:app --reload`, then:
+
+```bash
+curl -X POST http://127.0.0.1:8000/employees/ \
+  -H "Content-Type: application/json" \
+  -d '{"id": 0, "surname": "Employee", "name": "Four", "role": "employee", "salary": 3000, "wellness": "healthy", "expense_amount": 0}'
+```
+
+(`id` is required by the request schema but ignored — SQLite assigns the real one via auto-increment.)
+
 ## Running the tests
 
 ```bash
