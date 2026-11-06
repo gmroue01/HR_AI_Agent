@@ -167,4 +167,4 @@ def ingest_confidential_projects(folder_path: str):
 if __name__ == "__main__":
     ingest_documents(
         ["data/hr_policies", "data/salary_grids"])
-    ingest_confidential_projects("data/secret_projects")
+    ingest_confidential_projects("data/confidential_projects")

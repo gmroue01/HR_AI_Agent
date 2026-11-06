@@ -32,7 +32,7 @@ Employees has acces to the salary grid through the chatbot. The salary grid is a
 
 ## Feature 4 : Confidential Project Access
 
-HR can query confidential internal project files (participants, project descriptions) through the chatbot, gated behind a two-layer check: HR role AND a valid access code. Files are stored separately from general HR policies, in a dedicated ChromaDB collection (`confidential_projects`), ingested via [`rag/ingest_confidential.py`](../rag/ingest_confidential.py).
+HR can query confidential internal project files (participants, project descriptions) through the chatbot, gated behind a two-layer check: HR role AND a valid access code. Files are stored separately from general HR policies (in [`data/confidential_projects/`](../data/confidential_projects/)), in a dedicated ChromaDB collection (`confidential_projects`), ingested via [`ingest_confidential_projects()`](../rag/ingest.py).
 
 **New tool:** `access_confidential_project(project_code, query)` — checks `user_role == "HR"` first, then validates `project_code` against a server-side constant, before running the RAG search. Neither check is ever delegated to the model's judgment.
 

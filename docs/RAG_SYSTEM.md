@@ -19,8 +19,8 @@ The external knowledge source is stored into [`../data/`](../data/).
 
 In this project, we retrieve this type of source data : 
 
- -  ['hr_policies`](../data/hr_policies/) : Policies (PDF File) of the compagny about expenses.
- -  [`secret_projects`](../data/hr_policies/) : Confidential projects only accessible by the HR (PDF File).
+ -  [`hr_policies`](../data/hr_policies/) : Policies (PDF File) of the compagny about expenses.
+ -  [`confidential_projects`](../data/confidential_projects/) : Confidential projects only accessible by the HR (text files).
  -  [`salary_grid`](../data/salary_grids) : Salary grid of the company (Excel File).
 
 ## Text Chunking and Preprocessing :

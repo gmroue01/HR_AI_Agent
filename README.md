@@ -51,7 +51,8 @@ Requires Python 3.10+ and a Groq API key.
 
 ```bash
 python -m venv venv
-venv\Scripts\activate        # Windows
+venv\Scripts\activate         # Windows
+source venv/bin/activate      # macOS / Linux
 pip install -r requirements.txt
 ```
 
@@ -61,12 +62,11 @@ Create a `.env` file at the project root:
 GROQ_API_KEY=your_key_here
 ```
 
-Initialize the database and ingest the RAG documents:
+Initialize the employee database and ingest the RAG documents (HR policies, salary grid, confidential projects):
 
 ```bash
 python backend/init_db_sqlite3.py
-python -c "from rag.ingest import ingest_documents; ingest_documents(['data/hr_policies', 'data/salary_grids'])"
-python -c "from rag.ingest import ingest_confidential_projects; ingest_confidential_projects('data/secret_projects')"
+python -m rag.ingest
 ```
 
 ## Running the app
@@ -87,7 +87,9 @@ Login is by surname + name only — no password (see `backend/auth.py`). `backen
 | Manager  | One   | HR         |
 | Manager  | Two   | HR         |
 
-Use an `Employee` account to test expense submission, wellness self-updates, and the salary grid; use a `Manager` account to test wellness lookups/updates on any employee and confidential project access.
+Use an `Employee` account to test expense submission, wellness self-updates, and the salary grid; use a `Manager` account (role `HR`) to test wellness lookups/updates on any employee and confidential project access.
+
+To test confidential project access (a `Manager`/HR-only feature), the agent will ask for an access code — use `access_code_2026` (see `CONFIDENTIAL_PROJECTS_PASSWORD` in [`tools/dispatcher.py`](./tools/dispatcher.py)).
 
 ### Adding employees
 
